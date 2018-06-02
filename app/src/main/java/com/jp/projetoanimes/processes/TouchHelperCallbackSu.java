@@ -28,7 +28,8 @@ public class TouchHelperCallbackSu extends ItemTouchHelper.Callback {
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
 
         int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-        int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+        //int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END; pra um futuro aplicativo com swipe
+        int swipeFlags = 0;
 
         return makeMovementFlags(dragFlags, swipeFlags);
     }

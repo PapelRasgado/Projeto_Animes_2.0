@@ -68,7 +68,7 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> implements Ite
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemDismiss(holder.getAdapterPosition());
+                delete(holder.getAdapterPosition());
             }
         });
         holder.btnSend.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +124,10 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> implements Ite
 
     @Override
     public void onItemDismiss(final int position) {
+
+    }
+
+    public void delete(final int position){
         final String a = listAtual.get(position);
         new AlertDialog.Builder(act, R.style.AlertTheme)
                 .setTitle("Deseja apagar esse anime?")

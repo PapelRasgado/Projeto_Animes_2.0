@@ -35,14 +35,12 @@ public class TouchHelperCallbackAtual extends ItemTouchHelper.Callback {
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         int dragFlags;
-        int swipeFlags;
+        int swipeFlags = 0;
         if (ordenacao){
             dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN |
                         ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
-            swipeFlags = 0;
         } else {
             dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-            swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
         }
 
         return makeMovementFlags(dragFlags, swipeFlags);

@@ -133,8 +133,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> implements ItemTou
     }
 
     @Override
-    public void onItemDismiss(final int position) {
-        notifyItemChanged(position);
+    public void onItemDismiss(final int position){
     }
 
 
