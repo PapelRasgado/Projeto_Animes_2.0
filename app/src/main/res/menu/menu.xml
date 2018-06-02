@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:title="@string/menu_buscar" android:id="@+id/search"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_search"/>
+
+    <item android:title="@string/menu_reordenar" android:id="@+id/reorder"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_order"/>
+
+    <item android:title="@string/menu_configuraces" android:id="@+id/config" />
+    <item android:title="@string/menu_sobre" android:id="@+id/about" />
+
+</menu>

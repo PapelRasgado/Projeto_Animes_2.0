@@ -1,0 +1,49 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="popupTheme">@style/AppTheme.popup</item>
+    </style>
+
+    <style name="AppTheme.popup" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <style name="AlertTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+    <style name="RaisedButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="backgroundTint">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="MaterialSearchViewStyle">
+        <!-- Background for the search bar -->
+        <item name="searchBackground">@color/colorPrimary</item>
+
+        <!-- Change clear text icon -->
+        <item name="searchCloseIcon">@drawable/ic_action_navigation_close_inverted</item>
+
+        <!-- Change up icon -->
+        <item name="searchBackIcon">@drawable/ic_action_navigation_arrow_back_inverted</item>
+
+        <!-- Change text color for edit text. This will also be the color of the cursor -->
+        <item name="android:textColor">@android:color/white</item>
+
+        <item name="android:textColorHint">@android:color/white</item>
+
+        <!-- Hint for edit text -->
+        <item name="android:hint">@string/search</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+
+</resources>
