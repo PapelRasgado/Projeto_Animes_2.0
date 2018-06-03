@@ -33,8 +33,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_delete_light" />
-                                      <entry key="themeColor" value="000000" />
+                                      <entry key="outputName" value="ic_delete_accent" />
+                                      <entry key="theme" value="CUSTOM" />
+                                      <entry key="themeColor" value="ff4081" />
                                     </map>
                                   </option>
                                 </PersistentState>

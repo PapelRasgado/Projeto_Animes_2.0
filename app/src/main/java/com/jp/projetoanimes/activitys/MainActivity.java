@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.view.View;
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.adapters.TabsAdapter;
 import com.jp.projetoanimes.fragments.AtualFragment;
+import com.jp.projetoanimes.fragments.ConcluidoFragment;
 import com.jp.projetoanimes.fragments.SugestaoFragment;
 import com.jp.projetoanimes.processes.Codes;
 import com.jp.projetoanimes.types.InputDialog;
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private AtualFragment atual;
     private SugestaoFragment suges;
+    private ConcluidoFragment conc;
     private MaterialSearchView mSearch;
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -36,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         atual = new AtualFragment();
         adapter.add(atual, "Atual");
 
+        conc = new ConcluidoFragment();
+        adapter.add(conc, "Concluidos");
 
         viewPager = findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
@@ -67,6 +70,25 @@ public class MainActivity extends AppCompatActivity {
                     mSearch.closeSearch();
                 }
                 tabAtual = tab.getPosition();
+
+                ActionMenuItemView item = findViewById(R.id.reorder);
+                switch (tabAtual){
+                    case 0:
+                        item.setVisibility(View.GONE);
+                        break;
+                    case 1:
+                        if (item.getVisibility() == View.GONE){
+                            item.setVisibility(View.VISIBLE);
+                        }
+                        atual.atualizar();
+                        break;
+                    case 2:
+                        if (item.getVisibility() == View.GONE){
+                            item.setVisibility(View.VISIBLE);
+                        }
+                        conc.atualizar();
+                        break;
+                }
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {}
@@ -84,8 +106,13 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         Intent it = new Intent(MainActivity.this, AdicionarActivity.class);
+                        it.putExtra("type", 0);
                         startActivityForResult(it, Codes.ANIME_ADD);
                         break;
+                    case 2:
+                        Intent ite = new Intent(MainActivity.this, AdicionarActivity.class);
+                        ite.putExtra("type", 1);
+                        startActivityForResult(ite, Codes.ANIME_ADD_CONC);
                 }
             }
         });
@@ -105,6 +132,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         atual.fazerPesquisa(true, newText);
+                        break;
+                    case 2:
+                        conc.fazerPesquisa(true, newText);
                         break;
                 }
                 return true;
@@ -127,6 +157,9 @@ public class MainActivity extends AppCompatActivity {
                     case 1:
                         atual.fazerPesquisa(false, null);
                         break;
+                    case 2:
+                        conc.fazerPesquisa(false, null);
+                        break;
                 }
             }
         });
@@ -147,7 +180,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.reorder:
-                atual.mudarOrdenacao();
+                if (tabAtual != 0){
+                    atual.mudarOrdenacao();
+                    conc.mudarOrdenacao();
+                }
                 break;
             case R.id.config:
                 break;
@@ -161,10 +197,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Codes.ANIME_DETAIL && resultCode == Codes.ANIME_DELETE) {
             atual.apagar(data.getIntExtra("apagar", -1));
+        } else if (requestCode == Codes.ANIME_DETAIL && resultCode == Codes.ANIME_DELETE_CONC) {
+            conc.apagar(data.getIntExtra("apagar", -1));
         } else if (requestCode == Codes.ANIME_DETAIL && resultCode == Codes.ANIME_MODIFY){
-            atual.modificar();
-        } else if (requestCode == Codes.ANIME_ADD && resultCode == Codes.ANIME_ADDED){
-            atual.adiciona();
+            if (mSearch.isSearchOpen()){
+                mSearch.closeSearch();
+            }
+            atual.atualizar();
+        } else if (requestCode == Codes.ANIME_DETAIL && resultCode == Codes.ANIME_MODIFY_CONC){
+            if (mSearch.isSearchOpen()){
+                mSearch.closeSearch();
+            }
+            conc.atualizar();
+        }else if (requestCode == Codes.ANIME_ADD && resultCode == Codes.ANIME_ADDED){
+            if (mSearch.isSearchOpen()){
+                mSearch.closeSearch();
+            }
+            atual.atualizar();
+        } else if (requestCode == Codes.ANIME_ADD_CONC && resultCode == Codes.ANIME_ADDED_CONC){
+            if (mSearch.isSearchOpen()){
+                mSearch.closeSearch();
+            }
+            conc.atualizar();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

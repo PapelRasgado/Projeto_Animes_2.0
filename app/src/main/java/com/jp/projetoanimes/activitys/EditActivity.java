@@ -1,5 +1,6 @@
 package com.jp.projetoanimes.activitys;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -10,20 +11,21 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.jp.projetoanimes.R;
+import com.jp.projetoanimes.processes.Codes;
 import com.jp.projetoanimes.processes.SalvarBD;
 import com.jp.projetoanimes.types.Anime;
 
 import java.util.List;
+import java.util.Objects;
 
 public class EditActivity extends AppCompatActivity {
 
-    private int ANIME_MODIFY = 201;
+    private int type;
 
     private SalvarBD sbd;
     private int animeP;
     private Anime anime;
 
-    private Toolbar toolbar;
     private TextInputLayout txtNome;
     private AppCompatEditText etNome;
     private AppCompatEditText etEp;
@@ -31,7 +33,6 @@ public class EditActivity extends AppCompatActivity {
     private AppCompatEditText etNotas;
     private AppCompatEditText etUrl;
     private AppCompatEditText etLink;
-    private AppCompatButton btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,17 +40,20 @@ public class EditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adicionar);
 
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Editar Anime");
         setSupportActionBar(toolbar);
 
         sbd = new SalvarBD(this);
 
         animeP = getIntent().getIntExtra("anime_detalhe", -1) ;
-        anime = (Anime) sbd.pegaLista(0).get(animeP);
+        type = getIntent().getIntExtra("type", -1);
+        anime = (Anime) sbd.pegaLista(type).get(animeP);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+            Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
+        }
 
         txtNome = findViewById(R.id.txt_nome_su_add);
         etNome = findViewById(R.id.et_nome);
@@ -70,9 +74,10 @@ public class EditActivity extends AppCompatActivity {
         etLink = findViewById(R.id.et_link);
         etLink.setText(anime.getLink());
 
-        btn = findViewById(R.id.btn_confirmar);
+        AppCompatButton btn = findViewById(R.id.btn_confirmar);
         btn.setOnClickListener(new View.OnClickListener() {
 
+            @SuppressWarnings("unchecked")
             @Override
             public void onClick(View view) {
                 if (etNome.getText().toString().isEmpty()) {
@@ -87,10 +92,10 @@ public class EditActivity extends AppCompatActivity {
                             etLink.getText().toString()
 
                     );
-                    List<Anime> lista = sbd.pegaLista(0);
+                    List<Anime> lista = sbd.pegaLista(type);
                     lista.set(animeP, anime);
-                    sbd.salvaLista(0, lista);
-                    setResult(ANIME_MODIFY);
+                    sbd.salvaLista(type, lista);
+                    setResult(Codes.ANIME_MODIFY);
                     finish();
                 }
             }

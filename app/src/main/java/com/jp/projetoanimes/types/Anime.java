@@ -33,8 +33,6 @@ public class Anime implements Serializable {
     public Anime() {
     }
 
-    ;
-
     public String getNome() {
         return nome;
     }
@@ -99,5 +97,9 @@ public class Anime implements Serializable {
         this.link = link;
     }
 
+    @Override
+    public String toString() {
+        return nome;
+    }
 }
 

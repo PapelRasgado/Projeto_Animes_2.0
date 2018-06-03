@@ -29,8 +29,4 @@ public class ViewHolder extends RecyclerView.ViewHolder{
         this.btnMenos = itemView.findViewById(R.id.btn_menos);
 
     }
-
-
-
-
 }

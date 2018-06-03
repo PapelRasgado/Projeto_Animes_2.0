@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.activitys.AdicionarActivity;
-import com.jp.projetoanimes.activitys.DetailsActivity;
 import com.jp.projetoanimes.interfaces.ItemTouchHelperAdapter;
 import com.jp.projetoanimes.processes.Codes;
 import com.jp.projetoanimes.tasks.PesquisaSuTask;
@@ -34,6 +33,8 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> implements Ite
     private List<String> listAtual;
     private Activity act;
 
+
+    @SuppressWarnings("unchecked")
     public AdapterSu(Activity act) {
         this.act = act;
         sbd = new SalvarBD(act);
@@ -61,6 +62,7 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> implements Ite
             public void onClick(View v) {
                 ClipboardManager clipboard  = (ClipboardManager) act.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("Nome do anime", anime);
+                assert clipboard != null;
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(act , "Nome copiado!", Toast.LENGTH_SHORT).show();
             }
@@ -99,6 +101,7 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> implements Ite
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent it = new Intent(act, AdicionarActivity.class);
                         it.putExtra("anime_su_nome", a);
+                        it.putExtra("type", 0);
                         listCompleta.remove(a);
                         listAtual.remove(a);
                         notifyItemRemoved(position);
@@ -127,7 +130,7 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> implements Ite
 
     }
 
-    public void delete(final int position){
+    private void delete(final int position){
         final String a = listAtual.get(position);
         new AlertDialog.Builder(act, R.style.AlertTheme)
                 .setTitle("Deseja apagar esse anime?")

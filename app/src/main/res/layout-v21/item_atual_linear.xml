@@ -31,6 +31,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:src="@drawable/anime"
+            android:transitionName="simple_activity_transition"
             android:contentDescription="@string/imagem_do_anime" />
 
 

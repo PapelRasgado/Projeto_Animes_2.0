@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class SalvarBD {
 
     private final String FILENAME1 = "animes_lista";
@@ -115,10 +116,29 @@ public class SalvarBD {
                     oos.writeObject(listaSuges);
                     oos.close();
                     fos.close();
-                    return;
                 }catch(Exception e){
-                    return;
+                    break;
                 }
+        }
+    }
+
+    public void change(int listaSai, int listaEntra, Anime objeto){
+        switch (listaSai){
+            case 0:
+                listaAtual.remove(objeto);
+                break;
+            case 1:
+                listaConc.remove(objeto);
+                break;
+        }
+
+        switch (listaEntra){
+            case 0:
+                listaAtual.add(objeto);
+                break;
+            case 1:
+                listaConc.add(objeto);
+                break;
         }
     }
 }

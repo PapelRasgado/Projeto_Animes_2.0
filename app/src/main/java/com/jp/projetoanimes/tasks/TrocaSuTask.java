@@ -52,6 +52,6 @@ public class TrocaSuTask extends AsyncTask<Integer, Void, Void> {
 
     @Override
     protected void onPostExecute(Void v) {
-        adapter.notifyItemMoved(fromPosition, toPosition);;
+        adapter.notifyItemMoved(fromPosition, toPosition);
     }
 }

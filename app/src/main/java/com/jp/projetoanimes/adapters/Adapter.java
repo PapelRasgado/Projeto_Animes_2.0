@@ -1,6 +1,9 @@
 package com.jp.projetoanimes.adapters;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
@@ -13,6 +16,7 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -28,6 +32,7 @@ import com.jp.projetoanimes.processes.SalvarBD;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class Adapter extends RecyclerView.Adapter<ViewHolder> implements ItemTouchHelperAdapter {
 
     private List<Anime> listCompleta;
@@ -62,21 +67,33 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> implements ItemTou
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final Anime anime = listAtual.get(position);
+
         holder.titulo.setText(anime.getNome());
-        String episodio = "Episodio: " + anime.getEp();
+        holder.titulo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) act.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Nome do anime", anime.getNome());
+                assert clipboard != null;
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(act, "Nome copiado!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         Display getOrient = act.getWindowManager().getDefaultDisplay();
         Point size = new Point();
         getOrient.getSize(size);
-        if(ordenacao){
-            if (act.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-                holder.img.getLayoutParams().height = ((((size.x)/3)-32)*9)/16;
-            }else{
-                holder.img.getLayoutParams().height = ((((size.x)/2)-32)*9)/16;
+        if (ordenacao) {
+            if (act.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                holder.img.getLayoutParams().height = ((((size.x) / 3) - 32) * 9) / 16;
+            } else {
+                holder.img.getLayoutParams().height = ((((size.x) / 2) - 32) * 9) / 16;
             }
         } else {
-            holder.img.getLayoutParams().height = ((size.x-48)*9)/16;
+            holder.img.getLayoutParams().height = ((size.x - 48) * 9) / 16;
         }
 
+        String episodio = "Episodio: " + anime.getEp();
         holder.episodio.setText(episodio);
         holder.btnMenos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +116,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> implements ItemTou
             public void onClick(View view) {
                 Intent intent = new Intent(act, DetailsActivity.class);
                 intent.putExtra("anime_detalhe", listCompleta.indexOf(anime));
+                intent.putExtra("type", 0);
                 ActivityOptionsCompat options = ActivityOptionsCompat.
                         makeSceneTransitionAnimation(act,
                                 holder.img,
@@ -106,11 +124,18 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> implements ItemTou
                 act.startActivityForResult(intent, Codes.ANIME_DETAIL, options.toBundle());
             }
         });
-        if (!anime.getImage().isEmpty()) {
+
+        if (!anime.getImage().
+
+                isEmpty())
+
+        {
             Glide.with(holder.itemView.getContext())
                     .load(anime.getImage())
                     .into(holder.img);
-        } else {
+        } else
+
+        {
             Glide.with(holder.itemView.getContext())
                     .load(R.drawable.anime)
                     .into(holder.img);
@@ -133,7 +158,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> implements ItemTou
     }
 
     @Override
-    public void onItemDismiss(final int position){
+    public void onItemDismiss(final int position) {
     }
 
 
@@ -177,11 +202,11 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> implements ItemTou
 
             @Override
             public void onClick(View view) {
-                if (clicou){
+                if (clicou) {
                     clicou = false;
                     snackbar.dismiss();
                     listCompleta.add(position, a);
-                    if (finalPos != -1){
+                    if (finalPos != -1) {
                         listAtual.add(finalPos, a);
                         rec.scrollToPosition(finalPos);
                         notifyItemInserted(finalPos);
@@ -196,9 +221,9 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> implements ItemTou
         snackbar.show();
     }
 
-    public void atualizarItens(){
+    public void atualizarItens() {
         listCompleta = sbd.pegaLista(0);
-        listAtual = listCompleta;
+        listAtual = new ArrayList<>(listCompleta);
         notifyDataSetChanged();
     }
 }

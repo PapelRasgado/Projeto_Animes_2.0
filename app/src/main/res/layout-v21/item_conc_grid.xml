@@ -15,7 +15,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/titulo_anime"
+            android:id="@+id/titulo_anime_conc"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginBottom="4dp"
@@ -27,55 +27,43 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
         <ImageView
-            android:id="@+id/image"
+            android:contentDescription="@string/imagem_do_anime"
+            android:id="@+id/image_conc"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_below="@id/titulo_anime"
+            android:layout_below="@id/titulo_anime_conc"
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="4dp"
             android:scaleType="centerCrop"
             android:src="@drawable/anime"
-            android:contentDescription="@string/imagem_do_anime" />
-
-
-        <TextView
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginRight="16dp"
-            android:layout_below="@id/image"
-            android:id="@+id/episodio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/episodio_dois_pontos"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            android:transitionName="simple_activity_transition" />
 
 
         <LinearLayout
-            android:layout_below="@id/episodio"
+            android:layout_below="@id/image_conc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_menos"
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/btn_undo_conc"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
-                android:text="@string/menos_um" />
+                android:src="@drawable/ic_undo_accent"/>
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_mais"
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/btn_delete_conc"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
-                android:text="@string/mais_um" />
+                android:src="@drawable/ic_delete_accent" />
 
 
         </LinearLayout>

@@ -2,7 +2,7 @@
     <string name="app_name">Projeto Animes</string>
     <string name="adicionar_anime">Adicionar Anime</string>
     <string name="hint_nome">Nome&#8230;</string>
-    <string name="hint_episodio">Episodio&#8230;</string>
+    <string name="hint_episodio">Episódio&#8230;</string>
     <string name="hint_temporada">Temporada&#8230;</string>
     <string name="hint_notas">Notas&#8230;</string>
     <string name="hint_url_da_imagem">URL da imagem&#8230;</string>
@@ -17,9 +17,14 @@
     <string name="hint_link">Link para o anime&#8230;</string>
     <string name="descri_imagem_ampli">Imagem do anime ampliada</string>
     <string name="nome">Nome</string>
-    <string name="episodio">Episodio</string>
+    <string name="episodio">Episódio</string>
     <string name="temporada">Temporada</string>
     <string name="notas">Notas</string>
     <string name="src_imagem">Src da Imagem</string>
     <string name="link_anime">Link do Anime</string>
+    <string name="titulo_anime">Titulo Anime</string>
+    <string name="episodio_dois_pontos">Episódio:</string>
+    <string name="menos_um">-1</string>
+    <string name="mais_um">+1</string>
+    <string name="imagem_do_anime">Imagem do anime</string>
 </resources>

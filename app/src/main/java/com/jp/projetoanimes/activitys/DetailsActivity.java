@@ -7,11 +7,10 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.net.ProxyInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -31,11 +30,15 @@ import com.jp.projetoanimes.processes.Codes;
 import com.jp.projetoanimes.processes.SalvarBD;
 import com.jp.projetoanimes.types.Anime;
 
+import java.util.List;
+import java.util.Objects;
+
 public class DetailsActivity extends AppCompatActivity {
 
     private Anime anime;
     private int animeP;
     private boolean mod;
+    private int type;
 
     private ImageView img;
     private AppCompatTextView txtName;
@@ -92,8 +95,12 @@ public class DetailsActivity extends AppCompatActivity {
         link = findViewById(R.id.btn_fab_open);
 
         animeP = getIntent().getIntExtra("anime_detalhe", -1) ;
+        type = getIntent().getIntExtra("type", -1);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+            Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
+        }
 
         mudarDados();
     }
@@ -106,7 +113,8 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     public void mudarDados(){
-        anime = (Anime) new SalvarBD(this).pegaLista(0).get(animeP);
+        anime = (Anime) new SalvarBD(this).pegaLista(type).get(animeP);
+
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             Display getOrient = getWindowManager().getDefaultDisplay();
@@ -193,7 +201,11 @@ public class DetailsActivity extends AppCompatActivity {
         maisEp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(Codes.ANIME_MODIFY);
+                if (type == 0) {
+                    setResult(Codes.ANIME_MODIFY);
+                } else {
+                    setResult(Codes.ANIME_MODIFY_CONC);
+                }
                 mod = true;
                 anime.mudarEp(1);
                 txtEp.setText(String.valueOf(anime.getEp()));
@@ -205,7 +217,11 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (anime.getEp() > 1){
                     mod = true;
-                    setResult(Codes.ANIME_MODIFY);
+                    if (type == 0) {
+                        setResult(Codes.ANIME_MODIFY);
+                    } else {
+                        setResult(Codes.ANIME_MODIFY_CONC);
+                    }
                     anime.mudarEp(-1);
                     txtEp.setText(String.valueOf(anime.getEp()));
                 }
@@ -216,7 +232,11 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mod = true;
-                setResult(Codes.ANIME_MODIFY);
+                if (type == 0) {
+                    setResult(Codes.ANIME_MODIFY);
+                } else {
+                    setResult(Codes.ANIME_MODIFY_CONC);
+                }
                 anime.mudarTemp(1);
                 txtTemp.setText(String.valueOf(anime.getTemp()));
             }
@@ -227,7 +247,11 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (anime.getTemp() > 1){
                     mod = true;
-                    setResult(Codes.ANIME_MODIFY);
+                    if (type == 0) {
+                        setResult(Codes.ANIME_MODIFY);
+                    } else {
+                        setResult(Codes.ANIME_MODIFY_CONC);
+                    }
                     anime.mudarTemp(-1);
                     txtTemp.setText(String.valueOf(anime.getTemp()));
                 }
@@ -247,7 +271,11 @@ public class DetailsActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Intent it = new Intent();
                                 it.putExtra("apagar", animeP);
-                                setResult(Codes.ANIME_DELETE, it);
+                                if (type == 0){
+                                    setResult(Codes.ANIME_DELETE, it);
+                                } else {
+                                    setResult(Codes.ANIME_DELETE_CONC, it);
+                                }
                                 onBackPressed();
 
                             }
@@ -263,6 +291,7 @@ public class DetailsActivity extends AppCompatActivity {
             case R.id.menu_detail_edit:
                 Intent it = new Intent(DetailsActivity.this, EditActivity.class);
                 it.putExtra("anime_detalhe", animeP);
+                it.putExtra("type", type);
                 startActivityForResult(it, Codes.ANIME_EDIT);
                 break;
             case android.R.id.home:
@@ -281,17 +310,24 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Codes.ANIME_EDIT && resultCode == Codes.ANIME_MODIFY){
-            setResult(Codes.ANIME_MODIFY);
+            if (type == 0) {
+                setResult(Codes.ANIME_MODIFY);
+            } else {
+                setResult(Codes.ANIME_MODIFY_CONC);
+            }
             mod = true;
             mudarDados();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onStop() {
         if (mod) {
-            new SalvarBD(this).pegaLista(0).set(animeP, anime);
+            List<Anime> list = new SalvarBD(this).pegaLista(type);
+            list.set(animeP, anime);
+            new SalvarBD(this).salvaLista(type, list);
         }
         super.onStop();
     }

@@ -3,19 +3,19 @@ package com.jp.projetoanimes.tasks;
 import android.os.AsyncTask;
 
 import com.jp.projetoanimes.adapters.Adapter;
+import com.jp.projetoanimes.adapters.AdapterCon;
 import com.jp.projetoanimes.types.Anime;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TrocaTask extends AsyncTask<Integer, Void, Void> {
+public class TrocaConTask extends AsyncTask<Integer, Void, Void> {
 
-    private Adapter adapter;
+    private AdapterCon adapter;
     private int fromPosition;
     private int toPosition;
 
-    public TrocaTask(Adapter adapter){
+    public TrocaConTask(AdapterCon adapter){
         this.adapter = adapter;
     }
 
