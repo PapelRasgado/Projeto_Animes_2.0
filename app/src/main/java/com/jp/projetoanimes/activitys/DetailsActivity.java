@@ -297,6 +297,47 @@ public class DetailsActivity extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 break;
+            case R.id.menu_detail_send:
+                if (type == 0){
+                    new AlertDialog.Builder(DetailsActivity.this, R.style.AlertTheme)
+                            .setTitle("Deseja mandar esse anime pra lista de concluidos?")
+                            .setMessage("Nome: " + anime.getNome())
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    new SalvarBD(DetailsActivity.this).change(0,1, anime);
+                                    setResult(Codes.ANIME_MODIFY);
+                                    onBackPressed();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .show();
+                } else {
+                    new AlertDialog.Builder(DetailsActivity.this, R.style.AlertTheme)
+                            .setTitle("Deseja enviar esse anime de volta para a lista de atuais?")
+                            .setMessage("Nome: " + anime.getNome())
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    new SalvarBD(DetailsActivity.this).change(1,0, anime);
+                                    setResult(Codes.ANIME_MODIFY_CONC);
+                                    onBackPressed();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .show();
+                }
+                break;
         }
         return true;
     }

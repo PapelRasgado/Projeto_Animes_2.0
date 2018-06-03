@@ -2,6 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/menu_detail_send" android:title="@string/enviar"
+        android:icon="@drawable/ic_send_dark" app:showAsAction="always"/>
+
     <item android:id="@+id/menu_detail_edit" android:title="@string/menu_editar"
         android:icon="@drawable/ic_edit" app:showAsAction="always"/>
 
