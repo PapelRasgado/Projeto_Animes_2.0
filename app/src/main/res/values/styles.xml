@@ -19,6 +19,7 @@
 
     <style name="RaisedButton" parent="Widget.AppCompat.Button.Colored">
         <item name="backgroundTint">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="MaterialSearchViewStyle">

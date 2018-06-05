@@ -108,7 +108,9 @@ public class ConcluidoFragment extends Fragment {
     }
 
     public  void atualizar() {
-        adapter.atualizarItens();
+        if (adapter != null){
+            adapter.atualizarItens();
+        }
     }
 
 

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "872249505754",
+    "firebase_url": "https://projeto-anime.firebaseio.com",
+    "project_id": "projeto-anime",
+    "storage_bucket": "projeto-anime.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:872249505754:android:15bb0f2a34e7defc",
+        "android_client_info": {
+          "package_name": "com.jp.projetoanimes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "872249505754-p2dltal9o4nemfo0p3lvkisk82p725cq.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "872249505754-p2dltal9o4nemfo0p3lvkisk82p725cq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCH5yWPW14LGQLoSN3FzXR6dYEexOjZlwM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

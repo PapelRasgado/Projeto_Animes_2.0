@@ -13,12 +13,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.adapters.AdapterSu;
 import com.jp.projetoanimes.processes.TouchHelperCallbackSu;
 
 @SuppressLint("StaticFieldLeak")
 public class SugestaoFragment extends Fragment {
+
+    FirebaseAuth auth;
 
     static private RecyclerView recyclerView;
     static private AdapterSu adapter;
@@ -28,7 +31,7 @@ public class SugestaoFragment extends Fragment {
     static private Activity act;
 
     public SugestaoFragment(){
-
+        auth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -68,7 +71,7 @@ public class SugestaoFragment extends Fragment {
     }
 
     private void mudarAdapter(){
-        adapter = new AdapterSu(act);
+        adapter = new AdapterSu(act, auth.getCurrentUser().getUid());
 
         recyclerView.setAdapter(adapter);
     }

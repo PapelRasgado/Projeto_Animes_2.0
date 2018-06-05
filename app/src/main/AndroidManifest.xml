@@ -10,16 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activitys.MainActivity">
+        <activity android:name=".activitys.MainActivity"/>
+        <activity android:name=".activitys.AdicionarActivity" android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity android:name=".activitys.DetailsActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activitys.EditActivity" android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity android:name=".activitys.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activitys.AdicionarActivity" android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity android:name=".activitys.DetailsActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activitys.EditActivity" android:windowSoftInputMode="stateAlwaysHidden"/>
 
     </application>
 

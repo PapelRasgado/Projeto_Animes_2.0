@@ -28,4 +28,12 @@
     <string name="mais_um">+1</string>
     <string name="imagem_do_anime">Imagem do anime</string>
     <string name="enviar">Enviar</string>
+    <string name="email">Email...</string>
+    <string name="senha">Senha...</string>
+    <string name="logar">LOGAR</string>
+    <string name="cadastro">Não possui cadastro?</string>
+    <string name="logo_do_aplicativo">Logo do aplicativo</string>
+    <string name="tela_cadastro">Tela de Cadastro</string>
+    <string name="repeta_sua_senha">Repeta sua senha...</string>
+    <string name="cadastrar">CADASTRAR</string>
 </resources>
