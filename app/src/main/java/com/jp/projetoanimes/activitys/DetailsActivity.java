@@ -352,10 +352,8 @@ public class DetailsActivity extends AppCompatActivity {
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    DatabaseReference myref = database.getReference(user).child("listaConc");
-                                    myref.child(anime.getIdentifier()).removeValue();
-                                    myref = database.getReference(user).child("listaAtu");
-                                    myref.child(anime.getIdentifier()).setValue(anime);
+                                    database.getReference(user).child("listaConc").child(anime.getIdentifier()).removeValue();
+                                    database.getReference(user).child("listaAtu").child(anime.getIdentifier()).setValue(anime);
                                     setResult(Codes.ANIME_MODIFY_CONC);
                                     onBackPressed();
                                 }

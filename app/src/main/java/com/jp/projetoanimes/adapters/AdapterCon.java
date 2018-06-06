@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
@@ -21,30 +22,70 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.activitys.DetailsActivity;
-import com.jp.projetoanimes.interfaces.ItemTouchHelperAdapter;
 import com.jp.projetoanimes.processes.Codes;
 import com.jp.projetoanimes.tasks.PesquisaConTask;
 import com.jp.projetoanimes.types.Anime;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-@SuppressWarnings("unchecked")
-public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon> implements ItemTouchHelperAdapter {
+public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon>{
 
-    private List<Anime> listCompleta;
-    private SalvarBD sbd;
+    DatabaseReference myRef;
+    DatabaseReference usuRef;
+
+    private HashMap<String, Anime> listCompleta;
     private boolean ordenacao;
     private List<Anime> listAtual;
     private Activity act;
 
     public AdapterCon(Activity act, boolean ordenacao) {
         this.act = act;
-        sbd = new SalvarBD(act);
-        this.listCompleta = sbd.pegaLista(1);
-        this.listAtual = new ArrayList<>(listCompleta);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        myRef = database.getReference(auth.getUid()).child("listaAtu");
+        usuRef = database.getReference(auth.getUid());
+        this.listCompleta = new HashMap<>();
+        ChildEventListener listener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                listCompleta.put(s, dataSnapshot.getValue(Anime.class));
+                listAtual.add(dataSnapshot.getValue(Anime.class));
+                notifyItemInserted(listAtual.size()-1);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                listCompleta.put(s, dataSnapshot.getValue(Anime.class));
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                listCompleta.remove(dataSnapshot.getKey());
+                listAtual.remove(dataSnapshot.getValue(Anime.class));
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        myRef.addChildEventListener(listener);
+        this.listAtual = (List<Anime>) listCompleta.values();
         this.ordenacao = ordenacao;
     }
 
@@ -151,17 +192,7 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon> implements I
     }
 
     public void salvaLista() {
-        sbd.salvaLista(1, listCompleta);
-    }
-
-    @Override
-    public void onItemMove(int fromPosition, int toPosition) {
-        Integer[] ints = {fromPosition, toPosition};
-        new TrocaConTask(this).execute(ints);
-    }
-
-    @Override
-    public void onItemDismiss(final int position){
+        myRef.setValue(listCompleta);
     }
 
     private void send(final int position){
@@ -172,10 +203,9 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon> implements I
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        listCompleta.remove(a);
-                        listAtual.remove(a);
+                        myRef.child(a.getIdentifier()).removeValue();
+                        usuRef.child("listaAtu").child(a.getIdentifier()).setValue(a);
                         notifyItemRemoved(position);
-                        sbd.change(1, 0, a);
 
                     }
                 })
@@ -195,17 +225,13 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon> implements I
         if (b) {
             new PesquisaConTask(this).execute(nome);
         } else {
-            listAtual = new ArrayList<>(listCompleta);
+            listAtual = (List<Anime>) listCompleta.values();
         }
         notifyDataSetChanged();
     }
 
-    public List<Anime> getListCompleta() {
+    public HashMap<String, Anime> getListCompleta() {
         return listCompleta;
-    }
-
-    public List<Anime> getListAtual() {
-        return listAtual;
     }
 
     public void setListAtual(List<Anime> listAtual) {
@@ -213,44 +239,16 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon> implements I
         notifyDataSetChanged();
     }
 
-    private void apagar(final int position) {
-        final Anime a = listAtual.get(position);
-        int pos = listCompleta.indexOf(a);
-        listCompleta.remove(a);
-        listAtual.remove(a);
-        notifyItemRemoved(position);
-
-        final Snackbar snackbar = Snackbar.make(act.findViewById(R.id.btn_fab_add), "ANIME APAGADO", Snackbar.LENGTH_LONG);
-        final int finalPos = pos;
-        snackbar.setAction("DESFAZER", new View.OnClickListener() {
-
-            private boolean clicou = true;
-            @Override
-            public void onClick(View view) {
-                if (clicou) {
-                    clicou = false;
-                    snackbar.dismiss();
-                    listCompleta.add(finalPos, a);
-                    listAtual.add(position, a);
-                    notifyItemInserted(position);
-                }
-            }
-        });
-
-        View sView = snackbar.getView();
-        sView.setBackgroundColor(act.getResources().getColor(R.color.colorPrimary));
-
-        snackbar.show();
-
-    }
-
-    public void apagar(final int position, final RecyclerView rec) {
-        final Anime a = listCompleta.remove(position);
+    public void apagar(final String identifier, final RecyclerView rec) {
+        final Anime a = listCompleta.get(identifier);
+        myRef.child(a.getIdentifier()).removeValue();
         int pos = -1;
         if (listAtual.contains(a)) {
             pos = listAtual.indexOf(a);
             listAtual.remove(a);
-            rec.scrollToPosition(pos);
+            if (rec != null) {
+                rec.scrollToPosition(pos);
+            }
             notifyItemRemoved(pos);
         }
         final Snackbar snackbar = Snackbar.make(act.findViewById(R.id.btn_fab_add), "ANIME APAGADO", Snackbar.LENGTH_LONG);
@@ -264,22 +262,28 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon> implements I
                 if (clicou) {
                     clicou = false;
                     snackbar.dismiss();
-                    listCompleta.add(position, a);
+                    myRef.child(a.getIdentifier()).setValue(a);
                     if (finalPos != -1) {
                         listAtual.add(finalPos, a);
-                        rec.scrollToPosition(finalPos);
+                        if (rec != null) {
+                            rec.scrollToPosition(finalPos);
+                        }
                         notifyItemInserted(finalPos);
                     }
                 }
             }
         });
+
+        View sView = snackbar.getView();
+        sView.setBackgroundColor(act.getResources().getColor(R.color.colorPrimary));
+
+        snackbar.show();
     }
 
 
 
     public void atualizarItens(){
-        listCompleta = sbd.pegaLista(1);
-        listAtual = new ArrayList<>(listCompleta);
+        listAtual = (List<Anime>) listCompleta.values();
         notifyDataSetChanged();
     }
 }

@@ -198,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
             if (mSearch.isSearchOpen()) {
                 mSearch.closeSearch();
             }
-            atual.atualizar();
         } else if (requestCode == Codes.ANIME_DETAIL && resultCode == Codes.ANIME_MODIFY_CONC) {
             if (mSearch.isSearchOpen()) {
                 mSearch.closeSearch();
@@ -208,12 +207,10 @@ public class MainActivity extends AppCompatActivity {
             if (mSearch.isSearchOpen()) {
                 mSearch.closeSearch();
             }
-            atual.atualizar();
         } else if (requestCode == Codes.ANIME_ADD_CONC && resultCode == Codes.ANIME_ADDED_CONC) {
             if (mSearch.isSearchOpen()) {
                 mSearch.closeSearch();
             }
-            conc.atualizar();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
