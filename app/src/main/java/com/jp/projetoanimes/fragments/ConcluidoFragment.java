@@ -17,14 +17,12 @@ import android.view.ViewGroup;
 
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.adapters.AdapterCon;
-import com.jp.projetoanimes.processes.TouchHelperCallbackCon;
 
 @SuppressLint("StaticFieldLeak")
 public class ConcluidoFragment extends Fragment {
 
     static private RecyclerView recyclerView;
     static private AdapterCon adapter;
-    static private ItemTouchHelper touchHelper;
 
     static private boolean ordenacao;
     static private LayoutInflater inf;
@@ -52,7 +50,6 @@ public class ConcluidoFragment extends Fragment {
         }
         mudarManager();
         mudarAdapter();
-        mudarCallBack();
     }
 
     @Override
@@ -85,16 +82,6 @@ public class ConcluidoFragment extends Fragment {
         ordenacao = !ordenacao;
         mudarManager();
         mudarAdapter();
-        mudarCallBack();
-    }
-
-    public void mudarCallBack(){
-        if (touchHelper != null){
-            touchHelper.attachToRecyclerView(null);
-        }
-        TouchHelperCallbackCon callback = new TouchHelperCallbackCon(adapter, ordenacao);
-        touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(recyclerView);
     }
 
     public void fazerPesquisa(boolean b, String nome){

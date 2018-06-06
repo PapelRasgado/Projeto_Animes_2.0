@@ -25,9 +25,7 @@ import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.activitys.DetailsActivity;
 import com.jp.projetoanimes.interfaces.ItemTouchHelperAdapter;
 import com.jp.projetoanimes.processes.Codes;
-import com.jp.projetoanimes.processes.SalvarBD;
 import com.jp.projetoanimes.tasks.PesquisaConTask;
-import com.jp.projetoanimes.tasks.TrocaConTask;
 import com.jp.projetoanimes.types.Anime;
 
 import java.util.ArrayList;

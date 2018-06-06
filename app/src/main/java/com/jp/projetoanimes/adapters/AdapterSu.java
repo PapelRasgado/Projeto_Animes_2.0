@@ -26,7 +26,6 @@ import com.jp.projetoanimes.activitys.AdicionarActivity;
 import com.jp.projetoanimes.interfaces.ItemTouchHelperAdapter;
 import com.jp.projetoanimes.processes.Codes;
 import com.jp.projetoanimes.tasks.PesquisaSuTask;
-import com.jp.projetoanimes.tasks.TrocaSuTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;

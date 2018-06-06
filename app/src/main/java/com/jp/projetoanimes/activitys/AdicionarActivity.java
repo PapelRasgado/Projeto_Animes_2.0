@@ -10,19 +10,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.jp.projetoanimes.processes.Codes;
 import com.jp.projetoanimes.types.Anime;
 import com.jp.projetoanimes.R;
-import com.jp.projetoanimes.processes.SalvarBD;
 
-import java.util.List;
 import java.util.Objects;
 
 public class AdicionarActivity extends AppCompatActivity {
 
-    private int type;
+    private FirebaseDatabase database;
+    private FirebaseAuth auth;
 
-    private SalvarBD sbd;
+    private int type;
 
     private TextInputLayout txtNome;
     private AppCompatEditText etNome;
@@ -31,6 +33,7 @@ public class AdicionarActivity extends AppCompatActivity {
     private AppCompatEditText etNotas;
     private AppCompatEditText etUrl;
     private AppCompatEditText etLink;
+    private String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,10 @@ public class AdicionarActivity extends AppCompatActivity {
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
             Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         }
+
+        auth = FirebaseAuth.getInstance();
+        user = auth.getUid();
+        database = FirebaseDatabase.getInstance();
 
         txtNome = findViewById(R.id.txt_nome_su_add);
         etNome = findViewById(R.id.et_nome);
@@ -76,23 +83,23 @@ public class AdicionarActivity extends AppCompatActivity {
                 } else {
                     Anime anime = new Anime(etNome.getText().toString(),
                             etEp.getText().toString().isEmpty() ? 1 : Integer.parseInt(etEp.getText().toString()),
-                                    etTemp.getText().toString().isEmpty() ? 1 : Integer.parseInt(etTemp.getText().toString()),
-                                            etNotas.getText().toString(),
-                                                etUrl.getText().toString(),
-                                                    etLink.getText().toString()
+                            etTemp.getText().toString().isEmpty() ? 1 : Integer.parseInt(etTemp.getText().toString()),
+                            etNotas.getText().toString(),
+                            etUrl.getText().toString(),
+                            etLink.getText().toString()
 
                     );
                     switch (type){
                         case 0:
-                            List<Anime> lista = sbd.pegaLista(0);
-                            lista.add(anime);
-                            sbd.salvaLista(0, lista);
+                            DatabaseReference myRef = database.getReference(user + "/listaAtu").push();
+                            anime.setIdentifier(myRef.getKey());
+                            myRef.setValue(anime);
                             setResult(Codes.ANIME_ADDED);
                             break;
                         case 1:
-                            List<Anime> listaC = sbd.pegaLista(1);
-                            listaC.add(anime);
-                            sbd.salvaLista(1, listaC);
+                            DatabaseReference myRef2 = database.getReference(user + "/listaConc").push();
+                            anime.setIdentifier(myRef2.getKey());
+                            myRef2.push().setValue(anime);
                             setResult(Codes.ANIME_ADDED_CONC);
                             break;
                     }
@@ -111,12 +118,6 @@ public class AdicionarActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        sbd = new SalvarBD(this);
     }
 
 }

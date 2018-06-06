@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.adapters.AdapterSu;
-import com.jp.projetoanimes.processes.TouchHelperCallbackSu;
 
 @SuppressLint("StaticFieldLeak")
 public class SugestaoFragment extends Fragment {

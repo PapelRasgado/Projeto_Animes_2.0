@@ -19,6 +19,8 @@ public class Anime implements Serializable {
 
     private Date data;
 
+    private String identifier;
+
 
     public Anime(String nome, int ep, int temp, String notas, String image, String link) {
         this.nome = nome;
@@ -30,7 +32,26 @@ public class Anime implements Serializable {
         this.data = new Date();
     }
 
+    public Anime(String nome, int ep, int temp, String notas, String image, String link,Date date, String identifier) {
+        this.nome = nome;
+        this.ep = ep;
+        this.notas = notas;
+        this.temp = temp;
+        this.image = image;
+        this.link = link;
+        this.identifier = identifier;
+        this.data = date;
+    }
+
     public Anime() {
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public String getNome() {

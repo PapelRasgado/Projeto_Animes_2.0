@@ -2,6 +2,7 @@ package com.jp.projetoanimes.activitys;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -10,21 +11,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.processes.Codes;
-import com.jp.projetoanimes.processes.SalvarBD;
 import com.jp.projetoanimes.types.Anime;
 
-import java.util.List;
 import java.util.Objects;
 
 public class EditActivity extends AppCompatActivity {
 
+    private FirebaseDatabase database;
+    private FirebaseAuth auth;
+    private String user;
+
     private int type;
 
-    private SalvarBD sbd;
-    private int animeP;
     private Anime anime;
+    private String animeI;
 
     private TextInputLayout txtNome;
     private AppCompatEditText etNome;
@@ -44,11 +52,26 @@ public class EditActivity extends AppCompatActivity {
         toolbar.setTitle("Editar Anime");
         setSupportActionBar(toolbar);
 
-        sbd = new SalvarBD(this);
+        auth = FirebaseAuth.getInstance();
+        user = auth.getUid();
+        database = FirebaseDatabase.getInstance();
 
-        animeP = getIntent().getIntExtra("anime_detalhe", -1) ;
+        animeI = getIntent().getStringExtra("anime_detalhe");
         type = getIntent().getIntExtra("type", -1);
-        anime = (Anime) sbd.pegaLista(type).get(animeP);
+
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                anime = dataSnapshot.getValue(Anime.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+
+        database.getReference(user).child(animeI).addListenerForSingleValueEvent(listener);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
@@ -89,12 +112,21 @@ public class EditActivity extends AppCompatActivity {
                             etTemp.getText().toString().isEmpty() ? 1 : Integer.parseInt(etTemp.getText().toString()),
                             etNotas.getText().toString(),
                             etUrl.getText().toString(),
-                            etLink.getText().toString()
+                            etLink.getText().toString(),
+                            anime.getData(),
+                            anime.getIdentifier()
 
                     );
-                    List<Anime> lista = sbd.pegaLista(type);
-                    lista.set(animeP, anime);
-                    sbd.salvaLista(type, lista);
+                    switch (type){
+                        case 0:
+                            DatabaseReference myRef = database.getReference(user + "/listaAtu").child(anime.getIdentifier());
+                            myRef.setValue(anime);
+                            break;
+                        case 1:
+                            DatabaseReference myRef2 = database.getReference(user + "/listaConc").child(anime.getIdentifier());
+                            myRef2.setValue(anime);
+                            break;
+                    }
                     setResult(Codes.ANIME_MODIFY);
                     finish();
                 }

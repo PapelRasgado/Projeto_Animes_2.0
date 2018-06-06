@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jp.projetoanimes.R;
-import com.jp.projetoanimes.processes.TouchHelperCallbackAtual;
 import com.jp.projetoanimes.adapters.Adapter;
 
 @SuppressLint("StaticFieldLeak")
@@ -24,7 +23,6 @@ public class AtualFragment extends Fragment {
 
     static private RecyclerView recyclerView;
     static private Adapter adapter;
-    static private ItemTouchHelper touchHelper;
 
     static private boolean ordenacao;
     static private LayoutInflater inf;
@@ -52,7 +50,6 @@ public class AtualFragment extends Fragment {
         }
         mudarManager();
         mudarAdapter();
-        mudarCallBack();
     }
 
     @Override
@@ -85,17 +82,8 @@ public class AtualFragment extends Fragment {
         ordenacao = !ordenacao;
         mudarManager();
         mudarAdapter();
-        mudarCallBack();
     }
 
-    public void mudarCallBack(){
-        if (touchHelper != null){
-            touchHelper.attachToRecyclerView(null);
-        }
-        TouchHelperCallbackAtual callback = new TouchHelperCallbackAtual(adapter, ordenacao);
-        touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(recyclerView);
-    }
 
     public void fazerPesquisa(boolean b, String nome){
         if (adapter != null){
@@ -103,8 +91,8 @@ public class AtualFragment extends Fragment {
         }
     }
 
-    public void apagar(int position){
-        adapter.apagar(position, recyclerView);
+    public void apagar(String identifier){
+        adapter.apagar(identifier, recyclerView);
     }
 
     public  void atualizar(){

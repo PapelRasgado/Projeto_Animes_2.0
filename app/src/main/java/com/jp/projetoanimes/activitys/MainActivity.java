@@ -6,15 +6,11 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.adapters.TabsAdapter;
 import com.jp.projetoanimes.fragments.AtualFragment;
@@ -24,7 +20,6 @@ import com.jp.projetoanimes.processes.Codes;
 import com.jp.projetoanimes.types.InputDialog;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -196,9 +191,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Codes.ANIME_DETAIL && resultCode == Codes.ANIME_DELETE) {
-            atual.apagar(data.getIntExtra("apagar", -1));
+            atual.apagar(data.getStringExtra("apagar"));
         } else if (requestCode == Codes.ANIME_DETAIL && resultCode == Codes.ANIME_DELETE_CONC) {
-            conc.apagar(data.getIntExtra("apagar", -1));
+            conc.apagar(data.getStringExtra("apagar"));
         } else if (requestCode == Codes.ANIME_DETAIL && resultCode == Codes.ANIME_MODIFY) {
             if (mSearch.isSearchOpen()) {
                 mSearch.closeSearch();

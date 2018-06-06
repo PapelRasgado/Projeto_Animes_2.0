@@ -10,6 +10,7 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,18 +26,24 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.processes.Codes;
-import com.jp.projetoanimes.processes.SalvarBD;
 import com.jp.projetoanimes.types.Anime;
 
-import java.util.List;
 import java.util.Objects;
 
 public class DetailsActivity extends AppCompatActivity {
 
+    private FirebaseDatabase database;
+
     private Anime anime;
-    private int animeP;
+    private String animeI;
     private boolean mod;
     private int type;
 
@@ -60,6 +67,8 @@ public class DetailsActivity extends AppCompatActivity {
     private FloatingActionButton link;
 
     private ClipboardManager clipboard;
+
+    private String user;
 
 
     @Override
@@ -94,13 +103,31 @@ public class DetailsActivity extends AppCompatActivity {
 
         link = findViewById(R.id.btn_fab_open);
 
-        animeP = getIntent().getIntExtra("anime_detalhe", -1) ;
+        animeI = getIntent().getStringExtra("anime_detalhe") ;
         type = getIntent().getIntExtra("type", -1);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
             Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         }
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        user = auth.getUid();
+        database = FirebaseDatabase.getInstance();
+
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                anime = dataSnapshot.getValue(Anime.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+
+        database.getReference(user).child(animeI).addListenerForSingleValueEvent(listener);
 
         mudarDados();
     }
@@ -113,8 +140,6 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     public void mudarDados(){
-        anime = (Anime) new SalvarBD(this).pegaLista(type).get(animeP);
-
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             Display getOrient = getWindowManager().getDefaultDisplay();
@@ -269,12 +294,14 @@ public class DetailsActivity extends AppCompatActivity {
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                Intent it = new Intent();
-                                it.putExtra("apagar", animeP);
                                 if (type == 0){
-                                    setResult(Codes.ANIME_DELETE, it);
+                                    Intent data = new Intent();
+                                    data.putExtra("apagar", anime.getIdentifier());
+                                    setResult(Codes.ANIME_DELETE, data);
                                 } else {
-                                    setResult(Codes.ANIME_DELETE_CONC, it);
+                                    Intent data = new Intent();
+                                    data.putExtra("apagar", anime.getIdentifier());
+                                    setResult(Codes.ANIME_DELETE_CONC, data);
                                 }
                                 onBackPressed();
 
@@ -290,7 +317,7 @@ public class DetailsActivity extends AppCompatActivity {
                 break;
             case R.id.menu_detail_edit:
                 Intent it = new Intent(DetailsActivity.this, EditActivity.class);
-                it.putExtra("anime_detalhe", animeP);
+                it.putExtra("anime_detalhe", animeI);
                 it.putExtra("type", type);
                 startActivityForResult(it, Codes.ANIME_EDIT);
                 break;
@@ -305,7 +332,8 @@ public class DetailsActivity extends AppCompatActivity {
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    new SalvarBD(DetailsActivity.this).change(0,1, anime);
+                                    database.getReference(user).child("listaAtu").child(anime.getIdentifier()).removeValue();
+                                    database.getReference(user).child("listaConc").child(anime.getIdentifier()).setValue(anime);
                                     setResult(Codes.ANIME_MODIFY);
                                     onBackPressed();
                                 }
@@ -324,7 +352,10 @@ public class DetailsActivity extends AppCompatActivity {
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    new SalvarBD(DetailsActivity.this).change(1,0, anime);
+                                    DatabaseReference myref = database.getReference(user).child("listaConc");
+                                    myref.child(anime.getIdentifier()).removeValue();
+                                    myref = database.getReference(user).child("listaAtu");
+                                    myref.child(anime.getIdentifier()).setValue(anime);
                                     setResult(Codes.ANIME_MODIFY_CONC);
                                     onBackPressed();
                                 }
@@ -366,9 +397,15 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         if (mod) {
-            List<Anime> list = new SalvarBD(this).pegaLista(type);
-            list.set(animeP, anime);
-            new SalvarBD(this).salvaLista(type, list);
+            switch (type){
+                case 0:
+                    database.getReference(user).child("listaAtu").child(anime.getIdentifier()).setValue(anime);
+                    break;
+                case 1:
+                    database.getReference(user).child("listaConc").child(anime.getIdentifier()).setValue(anime);
+                    break;
+            }
+
         }
         super.onStop();
     }
