@@ -17,7 +17,7 @@ public class PesquisaSuTask extends AsyncTask<String, Void, List<String>> {
 
     @Override
     protected List<String> doInBackground(String... strings) {
-        List<String> listaC = adapter.getListCompleta();
+        List<String> listaC = new ArrayList<>(adapter.getListCompleta().values());
         List<String> listaA = new ArrayList<>();
         for (String s: listaC) {
             if(s.toLowerCase().contains(strings[0].toLowerCase())){

@@ -34,6 +34,7 @@ import com.jp.projetoanimes.processes.Codes;
 import com.jp.projetoanimes.tasks.PesquisaConTask;
 import com.jp.projetoanimes.types.Anime;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon>{
         this.act = act;
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        myRef = database.getReference(auth.getUid()).child("listaAtu");
+        myRef = database.getReference(auth.getUid()).child("listaConc");
         usuRef = database.getReference(auth.getUid());
         this.listCompleta = new HashMap<>();
         ChildEventListener listener = new ChildEventListener() {
@@ -85,7 +86,7 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon>{
             }
         };
         myRef.addChildEventListener(listener);
-        this.listAtual = (List<Anime>) listCompleta.values();
+        this.listAtual = new ArrayList<>(listCompleta.values());
         this.ordenacao = ordenacao;
     }
 
@@ -149,7 +150,7 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon>{
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                apagar(holder.getAdapterPosition());
+                                apagar(anime.getIdentifier(), null);
                             }
                         })
                         .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -166,7 +167,7 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon>{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(act, DetailsActivity.class);
-                intent.putExtra("anime_detalhe", listCompleta.indexOf(anime));
+                intent.putExtra("anime_detalhe", anime.getIdentifier());
                 intent.putExtra("type", 1);
                 ActivityOptionsCompat options = ActivityOptionsCompat.
                         makeSceneTransitionAnimation(act,
@@ -189,10 +190,6 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon>{
     @Override
     public int getItemCount() {
         return listAtual.size();
-    }
-
-    public void salvaLista() {
-        myRef.setValue(listCompleta);
     }
 
     private void send(final int position){
@@ -225,7 +222,7 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon>{
         if (b) {
             new PesquisaConTask(this).execute(nome);
         } else {
-            listAtual = (List<Anime>) listCompleta.values();
+            listAtual = new ArrayList<>(listCompleta.values());
         }
         notifyDataSetChanged();
     }
@@ -283,7 +280,7 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon>{
 
 
     public void atualizarItens(){
-        listAtual = (List<Anime>) listCompleta.values();
+        listAtual = new ArrayList<>(listCompleta.values());
         notifyDataSetChanged();
     }
 }

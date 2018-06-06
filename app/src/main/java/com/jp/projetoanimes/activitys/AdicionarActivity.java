@@ -99,7 +99,7 @@ public class AdicionarActivity extends AppCompatActivity {
                         case 1:
                             DatabaseReference myRef2 = database.getReference(user + "/listaConc").push();
                             anime.setIdentifier(myRef2.getKey());
-                            myRef2.push().setValue(anime);
+                            myRef2.setValue(anime);
                             setResult(Codes.ANIME_ADDED_CONC);
                             break;
                     }

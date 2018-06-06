@@ -33,6 +33,7 @@ import com.jp.projetoanimes.types.Anime;
 import com.jp.projetoanimes.tasks.PesquisaTask;
 import com.jp.projetoanimes.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder>{
             }
         };
         myRef.addChildEventListener(listener);
-        this.listAtual = (List<Anime>) listCompleta.values();
+        this.listAtual = new ArrayList<>(listCompleta.values());
         this.ordenacao = ordenacao;
     }
 
@@ -133,7 +134,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder>{
             public void onClick(View view) {
                 if (anime.getEp() > 1) {
                     anime.mudarEp(-1);
-                    listCompleta.put(anime.getIdentifier(), anime);
+                    myRef.child(anime.getIdentifier()).child("ep").setValue(anime.getEp());
                     notifyDataSetChanged();
                 }
             }
@@ -143,6 +144,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder>{
             public void onClick(View view) {
                 anime.mudarEp(+1);
                 listCompleta.put(anime.getIdentifier(), anime);
+                myRef.child(anime.getIdentifier()).child("ep").setValue(anime.getEp());
                 notifyDataSetChanged();
             }
         });
@@ -176,15 +178,11 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder>{
         return listAtual.size();
     }
 
-    public void salvaLista() {
-        myRef.setValue(listCompleta);
-    }
-
     public void fazerPesquisa(boolean b, String nome) {
         if (b) {
             new PesquisaTask(this).execute(nome);
         } else {
-            listAtual = (List<Anime>) listCompleta.values();
+            listAtual = new ArrayList<>(listCompleta.values());
         }
         notifyDataSetChanged();
     }
@@ -236,7 +234,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder>{
     }
 
     public void atualizarItens() {
-        listAtual = (List<Anime>) listCompleta.values();
+        listAtual = new ArrayList<>(listCompleta.values());
         notifyDataSetChanged();
     }
 }

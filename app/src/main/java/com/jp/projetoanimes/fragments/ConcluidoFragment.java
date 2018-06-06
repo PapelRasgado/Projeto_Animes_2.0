@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,12 +51,6 @@ public class ConcluidoFragment extends Fragment {
         mudarAdapter();
     }
 
-    @Override
-    public void onStop() {
-        adapter.salvaLista();
-        super.onStop();
-    }
-
     private void mudarManager(){
         RecyclerView.LayoutManager l;
         if (ordenacao){
@@ -90,8 +83,8 @@ public class ConcluidoFragment extends Fragment {
         }
     }
 
-    public void apagar(int position){
-        adapter.apagar(position, recyclerView);
+    public void apagar(String identifier){
+        adapter.apagar(identifier, recyclerView);
     }
 
     public  void atualizar() {

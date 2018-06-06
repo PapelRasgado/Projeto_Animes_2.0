@@ -54,13 +54,6 @@ public class SugestaoFragment extends Fragment {
         }
         mudarManager();
         mudarAdapter();
-        mudarCallBack();
-    }
-
-    @Override
-    public void onStop() {
-        adapter.salvaLista();
-        super.onStop();
     }
 
     private void mudarManager(){
@@ -75,15 +68,6 @@ public class SugestaoFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-
-    public void mudarCallBack(){
-        if (touchHelper != null){
-            touchHelper.attachToRecyclerView(null);
-        }
-        TouchHelperCallbackSu callback = new TouchHelperCallbackSu(adapter);
-        touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(recyclerView);
-    }
 
     public void fazerPesquisa(boolean b, String nome){
         if (adapter != null){

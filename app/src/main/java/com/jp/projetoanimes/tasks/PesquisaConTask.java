@@ -18,7 +18,7 @@ public class PesquisaConTask extends AsyncTask<String, Void, List<Anime>> {
 
     @Override
     protected List<Anime> doInBackground(String... strings) {
-        List<Anime> listaC = adapter.getListCompleta();
+        List<Anime> listaC = new ArrayList<>(adapter.getListCompleta().values());
         List<Anime> listaA = new ArrayList<>();
         for (Anime a: listaC) {
             if(a.getNome().toLowerCase().contains(strings[0].toLowerCase())){

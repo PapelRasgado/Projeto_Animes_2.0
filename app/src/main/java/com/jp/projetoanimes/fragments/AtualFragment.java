@@ -52,12 +52,6 @@ public class AtualFragment extends Fragment {
         mudarAdapter();
     }
 
-    @Override
-    public void onStop() {
-        adapter.salvaLista();
-        super.onStop();
-    }
-
     private void mudarManager(){
         RecyclerView.LayoutManager l;
         if (ordenacao){
@@ -93,6 +87,12 @@ public class AtualFragment extends Fragment {
 
     public void apagar(String identifier){
         adapter.apagar(identifier, recyclerView);
+    }
+
+    public  void atualizar() {
+        if (adapter != null){
+            adapter.atualizarItens();
+        }
     }
 
 

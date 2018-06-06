@@ -56,12 +56,12 @@
                 android:layout_width="0dp"
                 android:layout_height="57dp"
                 android:layout_margin="16dp"
-                android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/txt_cadastro_repeat_password"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_cadastro_email">
+                app:layout_constraintTop_toBottomOf="@+id/txt_cadastro_email"
+                app:passwordToggleEnabled="true">
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/et_cadastro_password"
@@ -78,11 +78,12 @@
                 android:layout_height="57dp"
                 android:layout_margin="16dp"
                 android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/btn_logar"
+                app:layout_constraintBottom_toTopOf="@+id/btn_cadastrar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_cadastro_password">
+                app:layout_constraintTop_toBottomOf="@+id/txt_cadastro_password"
+                app:passwordToggleEnabled="true">
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/et_cadastro_repeat_password"
@@ -100,7 +101,7 @@
                 android:layout_margin="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/cadastrar"
                 android:theme="@style/RaisedButton"
                 app:layout_constraintBottom_toBottomOf="parent"
