@@ -6,9 +6,14 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_search"/>
 
-    <item android:title="@string/menu_reordenar" android:id="@+id/reorder"
+    <item android:title="@string/menu_reordenar" android:id="@+id/list"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_grid"/>
+
+    <item android:title="@string/order" android:id="@+id/order"
         app:showAsAction="always"
         android:icon="@drawable/ic_order"/>
+
 
     <item android:title="@string/menu_configuraces" android:id="@+id/config" />
     <item android:title="@string/menu_sobre" android:id="@+id/about" />

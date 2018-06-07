@@ -14,7 +14,6 @@ import android.view.View;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jp.projetoanimes.R;
@@ -26,13 +25,11 @@ import java.util.Objects;
 public class EditActivity extends AppCompatActivity {
 
     private FirebaseDatabase database;
-    private FirebaseAuth auth;
     private String user;
 
     private int type;
 
     private Anime anime;
-    private String animeI;
 
     private TextInputLayout txtNome;
     private AppCompatEditText etNome;
@@ -52,11 +49,11 @@ public class EditActivity extends AppCompatActivity {
         toolbar.setTitle("Editar Anime");
         setSupportActionBar(toolbar);
 
-        auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getUid();
         database = FirebaseDatabase.getInstance();
 
-        animeI = getIntent().getStringExtra("anime_detalhe");
+        String animeI = getIntent().getStringExtra("anime_detalhe");
         type = getIntent().getIntExtra("type", -1);
 
         ValueEventListener listener = new ValueEventListener() {

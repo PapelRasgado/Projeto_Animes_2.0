@@ -39,4 +39,5 @@
     <string name="title_activity_config">ConfigActivity</string>
     <string name="config">Configurações</string>
     <string name="deslogar">DESLOGAR</string>
+    <string name="order">Ordenar</string>
 </resources>

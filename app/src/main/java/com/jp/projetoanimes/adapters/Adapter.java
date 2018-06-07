@@ -13,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,20 +56,25 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         ChildEventListener listener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                listCompleta.put(s, dataSnapshot.getValue(Anime.class));
-                listAtual.add(dataSnapshot.getValue(Anime.class));
-                notifyItemInserted(listAtual.size() - 1);
+                Anime a = dataSnapshot.getValue(Anime.class);
+                listCompleta.put(a.getIdentifier(), a);
+                if (!listAtual.contains(a)){
+                    listAtual.add(a);
+                    notifyItemInserted(listAtual.size() - 1);
+                }
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                listCompleta.put(s, dataSnapshot.getValue(Anime.class));
+                Anime a = dataSnapshot.getValue(Anime.class);
+                listCompleta.put(a.getIdentifier(), a);
                 notifyDataSetChanged();
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                listCompleta.remove(dataSnapshot.getKey());
+                Anime a = dataSnapshot.getValue(Anime.class);
+                listCompleta.remove(a.getIdentifier());
                 Anime anime = dataSnapshot.getValue(Anime.class);
                 if (listAtual.contains(anime)){
                     int pos = listAtual.indexOf(anime);
@@ -207,6 +213,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
     public void apagar(final String identifier, final RecyclerView rec) {
         final Anime a = listCompleta.get(identifier);
+        Log.d("infooo", listCompleta.toString());
         myRef.child(identifier).removeValue();
         int pos = -1;
         if (listAtual.contains(a)) {
@@ -226,12 +233,12 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
                 if (clicou) {
                     clicou = false;
                     snackbar.dismiss();
-                    myRef.child(a.getIdentifier()).setValue(a);
                     if (finalPos != -1) {
                         listAtual.add(finalPos, a);
                         rec.scrollToPosition(finalPos);
                         notifyItemInserted(finalPos);
                     }
+                    myRef.child(identifier).setValue(a);
                 }
             }
         });

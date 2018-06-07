@@ -49,10 +49,17 @@ public class LoginActivity extends AppCompatActivity {
                     if (!etSenha.getText().toString().isEmpty()) {
                         txtSenha.setErrorEnabled(false);
 
+                        etEmail.setEnabled(false);
+                        etSenha.setEnabled(false);
+                        logar.setEnabled(false);
+
                         mAuth.signInWithEmailAndPassword(etEmail.getText().toString(), etSenha.getText().toString())
                                 .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
+                                        etEmail.setEnabled(true);
+                                        etSenha.setEnabled(true);
+                                        logar.setEnabled(true);
                                         if (task.isSuccessful()) {
                                             finish();
                                             Intent it = new Intent(LoginActivity.this, MainActivity.class);

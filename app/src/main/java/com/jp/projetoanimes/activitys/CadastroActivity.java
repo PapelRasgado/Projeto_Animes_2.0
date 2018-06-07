@@ -71,10 +71,22 @@ public class CadastroActivity extends AppCompatActivity {
                         if (!etRepet.getText().toString().isEmpty()) {
                             txtRepet.setErrorEnabled(false);
                             if (etSenha.getText().toString().equals(etRepet.getText().toString())){
+
+                                etEmail.setEnabled(false);
+                                etSenha.setEnabled(false);
+                                etRepet.setEnabled(false);
+                                cadastrar.setEnabled(false);
+
                                 mAuth.createUserWithEmailAndPassword(etEmail.getText().toString(), etSenha.getText().toString())
                                         .addOnCompleteListener(CadastroActivity.this, new OnCompleteListener<AuthResult>() {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                                etEmail.setEnabled(true);
+                                                etSenha.setEnabled(true);
+                                                etRepet.setEnabled(true);
+                                                cadastrar.setEnabled(true);
+
                                                 if (task.isSuccessful()){
                                                     mAuth.signOut();
                                                     finish();

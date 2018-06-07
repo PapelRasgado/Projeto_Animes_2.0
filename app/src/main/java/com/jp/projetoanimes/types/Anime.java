@@ -1,9 +1,13 @@
 package com.jp.projetoanimes.types;
 
+import android.support.annotation.NonNull;
+
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class Anime implements Serializable {
+public class Anime implements Serializable, Comparable<Anime> {
 
     private String nome;
 
@@ -21,6 +25,8 @@ public class Anime implements Serializable {
 
     private String identifier;
 
+    public static String order;
+
 
     public Anime(String nome, int ep, int temp, String notas, String image, String link) {
         this.nome = nome;
@@ -32,7 +38,7 @@ public class Anime implements Serializable {
         this.data = new Date();
     }
 
-    public Anime(String nome, int ep, int temp, String notas, String image, String link,Date date, String identifier) {
+    public Anime(String nome, int ep, int temp, String notas, String image, String link, Date date, String identifier) {
         this.nome = nome;
         this.ep = ep;
         this.notas = notas;
@@ -44,6 +50,7 @@ public class Anime implements Serializable {
     }
 
     public Anime() {
+
     }
 
     public String getIdentifier() {
@@ -122,5 +129,24 @@ public class Anime implements Serializable {
     public String toString() {
         return nome;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj.getClass() == Anime.class && ((Anime) obj).identifier.equals(identifier);
+    }
+
+    @Override
+    public int compareTo(@NonNull Anime o) {
+        if (order.equals("ABC") || order.equals("CBA")){
+            return nome.compareTo(o.nome);
+        } else {
+            return data.compareTo(o.getData());
+        }
+    }
+
+    public static void setOrder(String newOrder){
+        order = newOrder;
+    }
+
 }
 

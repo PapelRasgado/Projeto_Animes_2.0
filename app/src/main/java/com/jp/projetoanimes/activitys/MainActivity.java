@@ -24,6 +24,8 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 public class MainActivity extends AppCompatActivity {
 
+    static private boolean init = true;
+
     private FloatingActionButton fab;
     private AtualFragment atual;
     private SugestaoFragment suges;
@@ -38,7 +40,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        if (init){
+            init = false;
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -177,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.reorder:
+            case R.id.list:
                 if (tabAtual != 0) {
                     atual.mudarOrdenacao();
                     conc.mudarOrdenacao();
@@ -188,6 +193,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(it, Codes.CONFIG_OPEN);
                 break;
             case R.id.about:
+                break;
+            case R.id.:
                 break;
         }
         return true;

@@ -25,6 +25,7 @@ public class AtualFragment extends Fragment {
     static private Adapter adapter;
 
     static private boolean ordenacao;
+    static private boolean order;
     static private LayoutInflater inf;
     static private Activity act;
 
