@@ -11,5 +11,7 @@ public class Codes {
     public static final int ANIME_ADDED = 301;
     public static final int ANIME_ADD_CONC = 302;
     public static final int ANIME_ADDED_CONC = 303;
+    public static final int CONFIG_OPEN = 400;
+    public static final int CONFIG_LOGOUT = 401;
 
 }

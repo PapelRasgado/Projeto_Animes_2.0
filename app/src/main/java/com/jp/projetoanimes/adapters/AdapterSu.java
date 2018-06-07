@@ -37,20 +37,20 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> {
     private HashMap<String, String> listCompleta;
     private List<String> listAtual;
     private Activity act;
-    private String user;
 
 
-    @SuppressWarnings("unchecked")
     public AdapterSu(Activity act, String user) {
         this.act = act;
-        this.user = user;
+
         listCompleta = new HashMap<>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRef = database.getReference(this.user + "/listaSug");
+        myRef = database.getReference(user + "/listaSug");
         ChildEventListener listener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 listCompleta.put(s, dataSnapshot.getValue(String.class));
+                listAtual.add(dataSnapshot.getValue(String.class));
+                notifyItemInserted(listAtual.size()-1);
             }
 
             @Override
@@ -61,6 +61,8 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> {
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 listCompleta.remove(dataSnapshot.getKey());
+                listAtual.remove(dataSnapshot.getValue(String.class));
+                notifyDataSetChanged();
             }
 
             @Override
@@ -160,13 +162,11 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        int pos = listAtual.indexOf(anime);
-                        notifyItemRemoved(pos);
+                        notifyItemRemoved(listAtual.indexOf(anime));
                         myRef.child(anime).removeValue();
                         listAtual.remove(anime);
 
                         final Snackbar snackbar = Snackbar.make(act.findViewById(R.id.btn_fab_add), "ANIME APAGADO", Snackbar.LENGTH_LONG);
-                        final int finalPos = pos;
                         snackbar.setAction("DESFAZER", new View.OnClickListener() {
 
                             private boolean clicou = true;
@@ -177,8 +177,6 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> {
                                     clicou = false;
                                     snackbar.dismiss();
                                     myRef.child(anime).setValue(anime);
-                                    listAtual.add(finalPos, anime);
-                                    notifyItemInserted(finalPos);
                                 }
                             }
                         });
@@ -201,8 +199,6 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> {
 
     public void adicionar(String nome){
         myRef.child(nome).setValue(nome);
-        listAtual.add(nome);
-        notifyItemInserted(listAtual.size()-1);
     }
 
     public void fazerPesquisa(boolean b, String nome) {

@@ -29,7 +29,6 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jp.projetoanimes.R;
@@ -41,10 +40,10 @@ import java.util.Objects;
 public class DetailsActivity extends AppCompatActivity {
 
     private FirebaseDatabase database;
+    private ValueEventListener listener;
 
     private Anime anime;
     private String animeI;
-    private boolean mod;
     private int type;
 
     private ImageView img;
@@ -115,10 +114,11 @@ public class DetailsActivity extends AppCompatActivity {
         user = auth.getUid();
         database = FirebaseDatabase.getInstance();
 
-        ValueEventListener listener = new ValueEventListener() {
+        listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 anime = dataSnapshot.getValue(Anime.class);
+                mudarDados();
             }
 
             @Override
@@ -127,9 +127,15 @@ public class DetailsActivity extends AppCompatActivity {
             }
         };
 
-        database.getReference(user).child(animeI).addListenerForSingleValueEvent(listener);
+        switch (type){
+            case 0:
+                database.getReference(user).child("listaAtu").child(animeI).addListenerForSingleValueEvent(listener);
+                break;
+            case 1:
+                database.getReference(user).child("listaConc").child(animeI).addListenerForSingleValueEvent(listener);
+                break;
+        }
 
-        mudarDados();
     }
 
     @Override
@@ -149,8 +155,10 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
 
-        if (!anime.getImage().isEmpty()){
-            Glide.with(this).load(anime.getImage()).into(img);
+        if (anime.getImage() != null){
+            if (!anime.getImage().isEmpty()){
+                Glide.with(this).load(anime.getImage()).into(img);
+            }
         }
 
         txtName.setText(anime.getNome());
@@ -226,13 +234,18 @@ public class DetailsActivity extends AppCompatActivity {
         maisEp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (type == 0) {
-                    setResult(Codes.ANIME_MODIFY);
-                } else {
-                    setResult(Codes.ANIME_MODIFY_CONC);
-                }
-                mod = true;
+
                 anime.mudarEp(1);
+                switch (type) {
+                    case 0:
+                        database.getReference(user).child("listaAtu").child(animeI).child("ep").setValue(anime.getEp());
+                        setResult(Codes.ANIME_MODIFY);
+                        break;
+                    case 1:
+                        database.getReference(user).child("listaConc").child(animeI).child("ep").setValue(anime.getEp());
+                        setResult(Codes.ANIME_MODIFY_CONC);
+                        break;
+                }
                 txtEp.setText(String.valueOf(anime.getEp()));
             }
         });
@@ -241,13 +254,17 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (anime.getEp() > 1){
-                    mod = true;
-                    if (type == 0) {
-                        setResult(Codes.ANIME_MODIFY);
-                    } else {
-                        setResult(Codes.ANIME_MODIFY_CONC);
-                    }
                     anime.mudarEp(-1);
+                    switch (type) {
+                        case 0:
+                            database.getReference(user).child("listaAtu").child(animeI).child("ep").setValue(anime.getEp());
+                            setResult(Codes.ANIME_MODIFY);
+                            break;
+                        case 1:
+                            database.getReference(user).child("listaConc").child(animeI).child("ep").setValue(anime.getEp());
+                            setResult(Codes.ANIME_MODIFY_CONC);
+                            break;
+                    }
                     txtEp.setText(String.valueOf(anime.getEp()));
                 }
             }
@@ -256,13 +273,17 @@ public class DetailsActivity extends AppCompatActivity {
         maisTemp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mod = true;
-                if (type == 0) {
-                    setResult(Codes.ANIME_MODIFY);
-                } else {
-                    setResult(Codes.ANIME_MODIFY_CONC);
-                }
                 anime.mudarTemp(1);
+                switch (type) {
+                    case 0:
+                        database.getReference(user).child("listaAtu").child(animeI).child("temp").setValue(anime.getEp());
+                        setResult(Codes.ANIME_MODIFY);
+                        break;
+                    case 1:
+                        database.getReference(user).child("listaConc").child(animeI).child("temp").setValue(anime.getEp());
+                        setResult(Codes.ANIME_MODIFY_CONC);
+                        break;
+                }
                 txtTemp.setText(String.valueOf(anime.getTemp()));
             }
         });
@@ -271,13 +292,17 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (anime.getTemp() > 1){
-                    mod = true;
-                    if (type == 0) {
-                        setResult(Codes.ANIME_MODIFY);
-                    } else {
-                        setResult(Codes.ANIME_MODIFY_CONC);
-                    }
                     anime.mudarTemp(-1);
+                    switch (type) {
+                        case 0:
+                            database.getReference(user).child("listaAtu").child(animeI).child("temp").setValue(anime.getEp());
+                            setResult(Codes.ANIME_MODIFY);
+                            break;
+                        case 1:
+                            database.getReference(user).child("listaConc").child(animeI).child("temp").setValue(anime.getEp());
+                            setResult(Codes.ANIME_MODIFY_CONC);
+                            break;
+                    }
                     txtTemp.setText(String.valueOf(anime.getTemp()));
                 }
             }
@@ -380,32 +405,18 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Codes.ANIME_EDIT && resultCode == Codes.ANIME_MODIFY){
-            if (type == 0) {
-                setResult(Codes.ANIME_MODIFY);
-            } else {
-                setResult(Codes.ANIME_MODIFY_CONC);
-            }
-            mod = true;
-            mudarDados();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void onStop() {
-        if (mod) {
-            switch (type){
+            switch (type) {
                 case 0:
-                    database.getReference(user).child("listaAtu").child(anime.getIdentifier()).setValue(anime);
+                    database.getReference(user).child("listaAtu").child(animeI).addListenerForSingleValueEvent(listener);
+                    setResult(Codes.ANIME_MODIFY);
                     break;
                 case 1:
-                    database.getReference(user).child("listaConc").child(anime.getIdentifier()).setValue(anime);
+                    database.getReference(user).child("listaConc").child(animeI).addListenerForSingleValueEvent(listener);
+                    setResult(Codes.ANIME_MODIFY_CONC);
                     break;
             }
-
         }
-        super.onStop();
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 

@@ -36,4 +36,7 @@
     <string name="tela_cadastro">Tela de Cadastro</string>
     <string name="repeta_sua_senha">Repeta sua senha...</string>
     <string name="cadastrar">CADASTRAR</string>
+    <string name="title_activity_config">ConfigActivity</string>
+    <string name="config">Configurações</string>
+    <string name="deslogar">DESLOGAR</string>
 </resources>

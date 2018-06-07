@@ -16,7 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthEmailException;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.jp.projetoanimes.R;
@@ -59,6 +59,7 @@ public class CadastroActivity extends AppCompatActivity {
         etRepet = findViewById(R.id.et_cadastro_repeat_password);
         cadastrar = findViewById(R.id.btn_cadastrar);
 
+
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,6 +76,7 @@ public class CadastroActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
                                                 if (task.isSuccessful()){
+                                                    mAuth.signOut();
                                                     finish();
                                                 } else {
                                                     try {
@@ -85,20 +87,20 @@ public class CadastroActivity extends AppCompatActivity {
                                                     } catch(FirebaseAuthUserCollisionException e) {
                                                         txtEmail.setErrorEnabled(true);
                                                         txtEmail.setError("Email já está em uso!");
-                                                    } catch (FirebaseAuthEmailException e) {
+                                                    } catch (FirebaseAuthInvalidCredentialsException e) {
                                                         txtEmail.setErrorEnabled(true);
                                                         txtEmail.setError("Email invalido!");
                                                     } catch(Exception e) {
-                                                        Log.e("ERROR", e.getMessage());
+                                                        Log.e("ERROR", e.toString());
                                                     }
                                                 }
                                             }
                                         });
                             } else {
                                 txtSenha.setErrorEnabled(true);
-                                txtSenha.setError("Senhas não combinam!");
+                                txtSenha.setError("As senhas não combinam!");
                                 txtRepet.setErrorEnabled(true);
-                                txtRepet.setError("Senhas não combinam!");
+                                txtRepet.setError("As senhas não combinam!");
                             }
 
                         } else {

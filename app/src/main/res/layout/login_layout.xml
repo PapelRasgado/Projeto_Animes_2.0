@@ -18,7 +18,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:layout_marginTop="48dp"
+                app:layout_constraintBottom_toTopOf="@+id/txt_login_password"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_logo">
 
@@ -37,10 +39,12 @@
                 android:layout_height="57dp"
                 android:layout_margin="16dp"
                 android:layout_marginTop="24dp"
+                app:layout_constraintBottom_toTopOf="@+id/btn_logar"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_login_email">
+                app:layout_constraintTop_toBottomOf="@+id/txt_login_email"
+                app:passwordToggleEnabled="true">
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/et_login_password"
@@ -58,12 +62,13 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="32dp"
+                android:contentDescription="@string/logo_do_aplicativo"
+                app:layout_constraintBottom_toTopOf="@+id/txt_login_email"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/logo"
-                android:contentDescription="@string/logo_do_aplicativo" />
+                app:srcCompat="@drawable/logo" />
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_logar"
@@ -74,7 +79,9 @@
                 android:layout_marginStart="8dp"
                 android:text="@string/logar"
                 android:theme="@style/RaisedButton"
+                app:layout_constraintBottom_toTopOf="@+id/btn_cadastro"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_login_password" />
 
@@ -86,6 +93,7 @@
                 android:layout_marginEnd="16dp"
                 android:text="@string/cadastro"
                 android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btn_logar" />
 

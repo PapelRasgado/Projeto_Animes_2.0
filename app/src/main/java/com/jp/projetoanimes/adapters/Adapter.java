@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Adapter extends RecyclerView.Adapter<ViewHolder>{
+public class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
     private DatabaseReference myRef;
 
@@ -56,16 +56,25 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder>{
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 listCompleta.put(s, dataSnapshot.getValue(Anime.class));
+                listAtual.add(dataSnapshot.getValue(Anime.class));
+                notifyItemInserted(listAtual.size() - 1);
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 listCompleta.put(s, dataSnapshot.getValue(Anime.class));
+                notifyDataSetChanged();
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 listCompleta.remove(dataSnapshot.getKey());
+                Anime anime = dataSnapshot.getValue(Anime.class);
+                if (listAtual.contains(anime)){
+                    int pos = listAtual.indexOf(anime);
+                    listAtual.remove(anime);
+                    notifyItemRemoved(pos);
+                }
             }
 
             @Override
@@ -198,7 +207,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder>{
 
     public void apagar(final String identifier, final RecyclerView rec) {
         final Anime a = listCompleta.get(identifier);
-        myRef.child(a.getIdentifier()).removeValue();
+        myRef.child(identifier).removeValue();
         int pos = -1;
         if (listAtual.contains(a)) {
             pos = listAtual.indexOf(a);

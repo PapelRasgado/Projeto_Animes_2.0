@@ -63,6 +63,7 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 anime = dataSnapshot.getValue(Anime.class);
+                mudarDados();
             }
 
             @Override
@@ -71,13 +72,24 @@ public class EditActivity extends AppCompatActivity {
             }
         };
 
-        database.getReference(user).child(animeI).addListenerForSingleValueEvent(listener);
+        switch (type){
+            case 0:
+                database.getReference(user).child("listaAtu").child(animeI).addListenerForSingleValueEvent(listener);
+                break;
+            case 1:
+                database.getReference(user).child("listaConc").child(animeI).addListenerForSingleValueEvent(listener);
+                break;
+        }
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
             Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         }
 
+    }
+
+    private void mudarDados(){
         txtNome = findViewById(R.id.txt_nome_su_add);
         etNome = findViewById(R.id.et_nome);
         etNome.setText(anime.getNome());
@@ -119,12 +131,10 @@ public class EditActivity extends AppCompatActivity {
                     );
                     switch (type){
                         case 0:
-                            DatabaseReference myRef = database.getReference(user + "/listaAtu").child(anime.getIdentifier());
-                            myRef.setValue(anime);
+                            database.getReference(user).child("listaAtu").child(anime.getIdentifier()).setValue(anime);
                             break;
                         case 1:
-                            DatabaseReference myRef2 = database.getReference(user + "/listaConc").child(anime.getIdentifier());
-                            myRef2.setValue(anime);
+                            database.getReference(user).child("listaCoc").child(anime.getIdentifier()).setValue(anime);
                             break;
                     }
                     setResult(Codes.ANIME_MODIFY);

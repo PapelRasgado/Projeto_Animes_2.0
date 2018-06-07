@@ -238,7 +238,7 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon>{
 
     public void apagar(final String identifier, final RecyclerView rec) {
         final Anime a = listCompleta.get(identifier);
-        myRef.child(a.getIdentifier()).removeValue();
+        myRef.child(identifier).removeValue();
         int pos = -1;
         if (listAtual.contains(a)) {
             pos = listAtual.indexOf(a);

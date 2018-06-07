@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.adapters.TabsAdapter;
 import com.jp.projetoanimes.fragments.AtualFragment;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -181,6 +184,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.config:
+                Intent it = new Intent(MainActivity.this, ConfigActivity.class);
+                startActivityForResult(it, Codes.CONFIG_OPEN);
                 break;
             case R.id.about:
                 break;
@@ -198,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
             if (mSearch.isSearchOpen()) {
                 mSearch.closeSearch();
             }
+            atual.atualizar();
         } else if (requestCode == Codes.ANIME_DETAIL && resultCode == Codes.ANIME_MODIFY_CONC) {
             if (mSearch.isSearchOpen()) {
                 mSearch.closeSearch();
@@ -211,6 +217,10 @@ public class MainActivity extends AppCompatActivity {
             if (mSearch.isSearchOpen()) {
                 mSearch.closeSearch();
             }
+        } else if (requestCode == Codes.CONFIG_OPEN && resultCode == Codes.CONFIG_LOGOUT){
+            finish();
+            Intent it = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(it);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
