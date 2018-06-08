@@ -96,6 +96,10 @@ public class AtualFragment extends Fragment {
         }
     }
 
+    public void changeOrder(){
+        adapter.changeOrder();
+    }
+
 
 
 }

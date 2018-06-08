@@ -35,6 +35,7 @@ import com.jp.projetoanimes.tasks.PesquisaTask;
 import com.jp.projetoanimes.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -61,6 +62,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
                 if (!listAtual.contains(a)){
                     listAtual.add(a);
                     notifyItemInserted(listAtual.size() - 1);
+                    mudarOrder();
                 }
             }
 
@@ -94,7 +96,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
             }
         };
         myRef.addChildEventListener(listener);
-        this.listAtual = new ArrayList<>(listCompleta.values());
+        this.listAtual = new ArrayList<>();
         this.ordenacao = ordenacao;
     }
 
@@ -251,6 +253,36 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
     public void atualizarItens() {
         listAtual = new ArrayList<>(listCompleta.values());
+        mudarOrder();
+    }
+
+    public void changeOrder(){
+        switch (Anime.order){
+            case "ABC":
+                Anime.setOrder("CBA");
+                Toast.makeText(act, "Ordenado por nome decrescente!", Toast.LENGTH_SHORT).show();
+                break;
+            case "CBA":
+                Anime.setOrder("123");
+                Toast.makeText(act, "Ordenado por data crescente!", Toast.LENGTH_SHORT).show();
+                break;
+            case "123":
+                Anime.setOrder("321");
+                Toast.makeText(act, "Ordenado por data decrescente!", Toast.LENGTH_SHORT).show();
+                break;
+            case "321":
+                Anime.setOrder("ABC");
+                Toast.makeText(act, "Ordenado por nome crescente!", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        mudarOrder();
+    }
+
+    private void mudarOrder(){
+        Collections.sort(listAtual);
+        if (Anime.order.equals("CBA") || Anime.order.equals("321")){
+            Collections.reverse(listAtual);
+        }
         notifyDataSetChanged();
     }
 }

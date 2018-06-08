@@ -1,23 +1,31 @@
 package com.jp.projetoanimes.activitys;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.adapters.TabsAdapter;
 import com.jp.projetoanimes.fragments.AtualFragment;
 import com.jp.projetoanimes.fragments.ConcluidoFragment;
 import com.jp.projetoanimes.fragments.SugestaoFragment;
 import com.jp.projetoanimes.processes.Codes;
+import com.jp.projetoanimes.types.Anime;
 import com.jp.projetoanimes.types.InputDialog;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
@@ -36,14 +44,54 @@ public class MainActivity extends AppCompatActivity {
 
     static private int tabAtual = -1;
 
+    static private boolean ordenacao;
+
+    FirebaseDatabase database;
+
+    private MenuItem reorder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        database = FirebaseDatabase.getInstance();
+
         if (init){
             init = false;
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            database.setPersistenceEnabled(true);
         }
+
+        database.getReference(FirebaseAuth.getInstance().getUid()).child("order").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Anime.setOrder(dataSnapshot.getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        database.getReference(FirebaseAuth.getInstance().getUid()).child("ordenacao").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null){
+                    ordenacao = dataSnapshot.getValue(Boolean.class);
+                    if (ordenacao){
+                        reorder.setIcon(R.drawable.ic_linear);
+                        atual.mudarOrdenacao();
+                        conc.mudarOrdenacao();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -176,6 +224,8 @@ public class MainActivity extends AppCompatActivity {
         MenuItem item = menu.findItem(R.id.search);
         mSearch.setMenuItem(item);
 
+        reorder = menu.findItem(R.id.list);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -183,6 +233,16 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.list:
+                if (!ordenacao){
+                    item.setIcon(R.drawable.ic_linear);
+                    ordenacao = true;
+                } else {
+                    item.setIcon(R.drawable.ic_grid);
+                    ordenacao = false;
+                }
+
+                database.getReference(FirebaseAuth.getInstance().getUid()).child("ordenacao").setValue(ordenacao);
+
                 if (tabAtual != 0) {
                     atual.mudarOrdenacao();
                     conc.mudarOrdenacao();
@@ -194,7 +254,16 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.about:
                 break;
-            case R.id.:
+            case R.id.order:
+                switch (tabAtual){
+                    case 1:
+                        atual.changeOrder();
+
+                        database.getReference(FirebaseAuth.getInstance().getUid()).child("order").setValue(Anime.order);
+                        break;
+                    case 2:
+                        break;
+                }
                 break;
         }
         return true;
@@ -244,5 +313,10 @@ public class MainActivity extends AppCompatActivity {
     void selectPage() {
         tabLayout.setScrollPosition(1, 0f, true);
         viewPager.setCurrentItem(1);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

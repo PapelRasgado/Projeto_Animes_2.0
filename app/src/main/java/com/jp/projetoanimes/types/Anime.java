@@ -25,7 +25,7 @@ public class Anime implements Serializable, Comparable<Anime> {
 
     private String identifier;
 
-    public static String order;
+    public static String order = "ABC";
 
 
     public Anime(String nome, int ep, int temp, String notas, String image, String link) {
