@@ -5,17 +5,16 @@
     android:layout_height="wrap_content">
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/txt_nome_su_add"
+        android:id="@+id/txt_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/et_nome_su_add"
+            android:id="@+id/et_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_nome"
@@ -23,5 +22,28 @@
 
 
     </android.support.design.widget.TextInputLayout>
+
+    <com.dd.processbutton.iml.ActionProcessButton
+        android:id="@+id/btn_send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/enviar"
+        android:theme="@style/RaisedButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_input"
+        app:pb_colorComplete="@color/green_complete"
+        app:pb_colorError="@color/red_error"
+        app:pb_colorNormal="@color/colorPrimary"
+        app:pb_colorPressed="@color/colorPrimaryDark"
+        app:pb_colorProgress="@color/purple_progress"
+        app:pb_textComplete="COMPLETO"
+        app:pb_textError="ERRO"
+        app:pb_textProgress="CARREGANDO" />
 
 </android.support.constraint.ConstraintLayout>

@@ -24,12 +24,12 @@
             android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/txt_nome_su_add"
+                android:id="@+id/txt_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp">
+                android:layout_marginTop="16dp">
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/et_nome"
@@ -45,10 +45,10 @@
                 android:id="@+id/txt_ep"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/txt_nome_su_add"
+                android:layout_below="@id/txt_input"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp">
+                android:layout_marginTop="16dp">
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/et_ep"
@@ -66,7 +66,7 @@
                 android:layout_below="@id/txt_ep"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp">
+                android:layout_marginTop="16dp">
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/et_temp"
@@ -84,7 +84,7 @@
                 android:layout_below="@id/txt_temp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp">
+                android:layout_marginTop="16dp">
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/et_notas"
@@ -102,7 +102,7 @@
                 android:layout_below="@id/txt_notas"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp">
+                android:layout_marginTop="16dp">
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/et_url"
@@ -120,7 +120,7 @@
                 android:layout_below="@id/txt_url"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp">
+                android:layout_marginTop="16dp">
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/et_link"
@@ -131,12 +131,164 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/check_lance"
+                android:layout_below="@id/txt_link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/anime_em_lan_amento"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/txt_view_dias"
+                android:layout_below="@id/check_lance"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Dias de lançamento:"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                style="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:visibility="gone"/>
+
+
+            <LinearLayout
+                android:id="@+id/dias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal"
+                android:layout_below="@id/txt_view_dias"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:visibility="gone">
+
+                <ToggleButton
+                    android:id="@+id/sunday_toggle"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:background="@drawable/circle_toggle_button"
+                    android:textOn="@string/d"
+                    android:textOff="@string/d"
+                    android:textSize="22sp"
+                    android:textColor="@android:color/white"
+                    android:text="New ToggleButton" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <ToggleButton
+                    android:id="@+id/monday_toggle"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:background="@drawable/circle_toggle_button"
+                    android:textOn="@string/s"
+                    android:textOff="@string/s"
+                    android:textSize="22sp"
+                    android:textColor="@android:color/white"
+                    android:text="New ToggleButton" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+
+                <ToggleButton
+                    android:id="@+id/tuesday_toggle"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:background="@drawable/circle_toggle_button"
+                    android:textOn="@string/t"
+                    android:textOff="@string/t"
+                    android:textSize="22sp"
+                    android:textColor="@android:color/white"
+                    android:text="New ToggleButton" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <ToggleButton
+                    android:id="@+id/wednesday_toggle"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:background="@drawable/circle_toggle_button"
+                    android:textOn="@string/q"
+                    android:textOff="@string/q"
+                    android:textSize="22sp"
+                    android:textColor="@android:color/white"
+                    android:text="New ToggleButton" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+
+                <ToggleButton
+                    android:id="@+id/thursday_toggle"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:background="@drawable/circle_toggle_button"
+                    android:textOn="@string/q"
+                    android:textOff="@string/q"
+                    android:textSize="22sp"
+                    android:textColor="@android:color/white"
+                    android:text="New ToggleButton" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <ToggleButton
+                    android:id="@+id/friday_toggle"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:background="@drawable/circle_toggle_button"
+                    android:textOn="@string/s"
+                    android:textOff="@string/s"
+                    android:textSize="22sp"
+                    android:textColor="@android:color/white"
+                    android:text="New ToggleButton" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <ToggleButton
+                    android:id="@+id/saturday_toggle"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:background="@drawable/circle_toggle_button"
+                    android:textOn="@string/s"
+                    android:textOff="@string/s"
+                    android:textSize="22sp"
+                    android:textColor="@android:color/white"
+                    android:text="New ToggleButton" />
+            </LinearLayout>
+
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_confirmar"
                 style="@style/RaisedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/txt_link"
+                android:layout_below="@id/dias"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:layout_margin="16dp"

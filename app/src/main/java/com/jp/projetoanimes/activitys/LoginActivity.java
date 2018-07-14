@@ -2,6 +2,7 @@ package com.jp.projetoanimes.activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -10,12 +11,14 @@ import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
 import android.view.View;
 
+import com.dd.processbutton.iml.ActionProcessButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.jp.projetoanimes.R;
+import com.jp.projetoanimes.types.RecoveryDialog;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,8 +27,9 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout txtSenha;
     private AppCompatEditText etEmail;
     private AppCompatEditText etSenha;
-    private AppCompatButton logar;
+    private ActionProcessButton logar;
     private AppCompatButton cadastro;
+    private AppCompatButton recovery;
 
 
     @Override
@@ -40,10 +44,13 @@ public class LoginActivity extends AppCompatActivity {
         etSenha = findViewById(R.id.et_login_password);
         logar = findViewById(R.id.btn_logar);
         cadastro = findViewById(R.id.btn_cadastro);
+        recovery = findViewById(R.id.btn_recovery);
+        logar.setMode(ActionProcessButton.Mode.ENDLESS);
 
         logar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                logar.setProgress(1);
                 if (!etEmail.getText().toString().isEmpty()) {
                     txtEmail.setErrorEnabled(false);
                     if (!etSenha.getText().toString().isEmpty()) {
@@ -61,10 +68,18 @@ public class LoginActivity extends AppCompatActivity {
                                         etSenha.setEnabled(true);
                                         logar.setEnabled(true);
                                         if (task.isSuccessful()) {
-                                            finish();
-                                            Intent it = new Intent(LoginActivity.this, MainActivity.class);
-                                            startActivity(it);
+                                            logar.setProgress(100);
+                                            final Handler handler = new Handler();
+                                            handler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    finish();
+                                                    Intent it = new Intent(LoginActivity.this, MainActivity.class);
+                                                    startActivity(it);
+                                                }
+                                            }, 2000);
                                         } else {
+                                            logar.setProgress(-1);
                                             try {
                                                 throw task.getException();
                                             } catch (FirebaseAuthInvalidCredentialsException e) {
@@ -82,8 +97,10 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         txtSenha.setErrorEnabled(true);
                         txtSenha.setError("Coloque uma senha!");
+                        logar.setProgress(-1);
                     }
                 } else {
+                    logar.setProgress(-1);
                     txtEmail.setErrorEnabled(true);
                     txtEmail.setError("Coloque um email!");
                 }
@@ -95,6 +112,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent it = new Intent(LoginActivity.this, CadastroActivity.class);
                 startActivity(it);
+            }
+        });
+
+        recovery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new RecoveryDialog(LoginActivity.this).show();
             }
         });
 

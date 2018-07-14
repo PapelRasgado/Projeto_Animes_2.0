@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,18 +17,20 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_scrollFlags="scroll|enterAlways"/>
 
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0">
 
         <android.support.constraint.ConstraintLayout
-            android:layout_gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/txt_cadastro_email"
@@ -55,7 +56,7 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/txt_cadastro_password"
                 android:layout_width="0dp"
-                android:layout_height="57dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/txt_cadastro_repeat_password"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +77,7 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/txt_cadastro_repeat_password"
                 android:layout_width="0dp"
-                android:layout_height="57dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/btn_cadastrar"
@@ -95,7 +96,8 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.v7.widget.AppCompatButton
+
+            <com.dd.processbutton.iml.ActionProcessButton
                 android:id="@+id/btn_cadastrar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -109,10 +111,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_cadastro_repeat_password" />
+                app:layout_constraintTop_toBottomOf="@+id/txt_cadastro_repeat_password"
+                app:pb_colorComplete="@color/green_complete"
+                app:pb_colorError="@color/red_error"
+                app:pb_colorNormal="@color/colorPrimary"
+                app:pb_colorPressed="@color/colorPrimaryDark"
+                app:pb_colorProgress="@color/purple_progress"
+                app:pb_textComplete="CADASTRADO"
+                app:pb_textError="ERRO"
+                app:pb_textProgress="CARREGANDO" />
 
         </android.support.constraint.ConstraintLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

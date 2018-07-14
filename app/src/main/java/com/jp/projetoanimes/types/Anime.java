@@ -6,6 +6,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class Anime implements Serializable, Comparable<Anime> {
 
@@ -25,10 +26,18 @@ public class Anime implements Serializable, Comparable<Anime> {
 
     private String identifier;
 
+    private boolean star;
+
+    private boolean lanc;
+
+    private boolean agend;
+
+    private List<Integer> dias;
+
     public static String order = "ABC";
 
 
-    public Anime(String nome, int ep, int temp, String notas, String image, String link) {
+    public Anime(String nome, int ep, int temp, String notas, String image, String link, List<Integer> dias , boolean lanc) {
         this.nome = nome;
         this.ep = ep;
         this.notas = notas;
@@ -36,9 +45,11 @@ public class Anime implements Serializable, Comparable<Anime> {
         this.image = image;
         this.link = link;
         this.data = new Date();
+        this.dias = dias;
+        this.lanc = lanc;
     }
 
-    public Anime(String nome, int ep, int temp, String notas, String image, String link, Date date, String identifier) {
+    public Anime(String nome, int ep, int temp, String notas, String image, String link, Date date, String identifier, List<Integer> dias, boolean lanc, boolean agend) {
         this.nome = nome;
         this.ep = ep;
         this.notas = notas;
@@ -47,6 +58,9 @@ public class Anime implements Serializable, Comparable<Anime> {
         this.link = link;
         this.identifier = identifier;
         this.data = date;
+        this.dias = dias;
+        this.lanc = lanc;
+        this.agend = agend;
     }
 
     public Anime() {
@@ -125,6 +139,14 @@ public class Anime implements Serializable, Comparable<Anime> {
         this.link = link;
     }
 
+    public boolean isStar() {
+        return star;
+    }
+
+    public void setStar(boolean star) {
+        this.star = star;
+    }
+
     @Override
     public String toString() {
         return nome;
@@ -148,5 +170,28 @@ public class Anime implements Serializable, Comparable<Anime> {
         order = newOrder;
     }
 
+    public void setDias(List<Integer> dias) {
+        this.dias = dias;
+    }
+
+    public List<Integer> getDias() {
+        return dias;
+    }
+
+    public void setLanc(boolean lanc) {
+        this.lanc = lanc;
+    }
+
+    public boolean isLanc() {
+        return lanc;
+    }
+
+    public boolean isAgend() {
+        return agend;
+    }
+
+    public void setAgend(boolean agend) {
+        this.agend = agend;
+    }
 }
 

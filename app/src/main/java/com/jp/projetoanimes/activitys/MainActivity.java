@@ -48,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
 
-    private MenuItem reorder;
+    static private MenuItem reorder;
+    static private MenuItem ordering;
 
 
     @Override
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
 
-        if (init){
+        if (init) {
             init = false;
             database.setPersistenceEnabled(true);
         }
@@ -65,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Anime.setOrder(dataSnapshot.getValue(String.class));
+                if (Anime.order.equals("ABC") || Anime.order.equals("CBA")) {
+                    ordering.setIcon(R.drawable.ic_alphabetical);
+                } else {
+                    ordering.setIcon(R.drawable.ic_timer);
+                }
             }
 
             @Override
@@ -76,12 +82,12 @@ public class MainActivity extends AppCompatActivity {
         database.getReference(FirebaseAuth.getInstance().getUid()).child("ordenacao").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null){
+                if (dataSnapshot.getValue() != null) {
                     ordenacao = dataSnapshot.getValue(Boolean.class);
-                    if (ordenacao){
-                        reorder.setIcon(R.drawable.ic_linear);
-                        atual.mudarOrdenacao();
-                        conc.mudarOrdenacao();
+                    if (ordenacao) {
+                        reorder.setIcon(R.drawable.ic_grid);
+                        atual.mudarOrdenacao(ordenacao);
+                        conc.mudarOrdenacao(ordenacao);
                     }
                 }
             }
@@ -225,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
         mSearch.setMenuItem(item);
 
         reorder = menu.findItem(R.id.list);
+        ordering = menu.findItem(R.id.order);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -233,20 +240,19 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.list:
-                if (!ordenacao){
-                    item.setIcon(R.drawable.ic_linear);
-                    ordenacao = true;
-                } else {
+                if (!ordenacao) {
                     item.setIcon(R.drawable.ic_grid);
+                    ordenacao = true;
+
+                } else {
+                    item.setIcon(R.drawable.ic_linear);
                     ordenacao = false;
                 }
 
                 database.getReference(FirebaseAuth.getInstance().getUid()).child("ordenacao").setValue(ordenacao);
 
-                if (tabAtual != 0) {
-                    atual.mudarOrdenacao();
-                    conc.mudarOrdenacao();
-                }
+                atual.mudarOrdenacao(ordenacao);
+                conc.mudarOrdenacao(ordenacao);
                 break;
             case R.id.config:
                 Intent it = new Intent(MainActivity.this, ConfigActivity.class);
@@ -255,9 +261,14 @@ public class MainActivity extends AppCompatActivity {
             case R.id.about:
                 break;
             case R.id.order:
-                switch (tabAtual){
+                switch (tabAtual) {
                     case 1:
                         atual.changeOrder();
+                        if (Anime.order.equals("ABC") || Anime.order.equals("CBA")) {
+                            item.setIcon(R.drawable.ic_alphabetical);
+                        } else {
+                            item.setIcon(R.drawable.ic_timer);
+                        }
 
                         database.getReference(FirebaseAuth.getInstance().getUid()).child("order").setValue(Anime.order);
                         break;
@@ -293,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
             if (mSearch.isSearchOpen()) {
                 mSearch.closeSearch();
             }
-        } else if (requestCode == Codes.CONFIG_OPEN && resultCode == Codes.CONFIG_LOGOUT){
+        } else if (requestCode == Codes.CONFIG_OPEN && resultCode == Codes.CONFIG_LOGOUT) {
             finish();
             Intent it = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(it);

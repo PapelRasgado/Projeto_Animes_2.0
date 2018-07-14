@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jp.projetoanimes.R;
+import com.sackcentury.shinebuttonlib.ShineButton;
 
 public class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -18,6 +19,7 @@ public class ViewHolder extends RecyclerView.ViewHolder{
     public TextView episodio;
     public AppCompatButton btnMais;
     public AppCompatButton btnMenos;
+    public ShineButton star;
 
     ViewHolder(View itemView) {
         super(itemView);
@@ -27,6 +29,7 @@ public class ViewHolder extends RecyclerView.ViewHolder{
         this.episodio = itemView.findViewById(R.id.episodio);
         this.btnMais = itemView.findViewById(R.id.btn_mais);
         this.btnMenos = itemView.findViewById(R.id.btn_menos);
+        this.star = itemView.findViewById(R.id.btn_star);
 
     }
 }

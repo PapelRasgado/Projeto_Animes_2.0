@@ -28,16 +28,22 @@
     <string name="mais_um">+1</string>
     <string name="imagem_do_anime">Imagem do anime</string>
     <string name="enviar">Enviar</string>
-    <string name="email">Email...</string>
-    <string name="senha">Senha...</string>
+    <string name="email">Email&#8230;</string>
+    <string name="senha">Senha&#8230;</string>
     <string name="logar">LOGAR</string>
     <string name="cadastro">Não possui cadastro?</string>
     <string name="logo_do_aplicativo">Logo do aplicativo</string>
     <string name="tela_cadastro">Tela de Cadastro</string>
-    <string name="repeta_sua_senha">Repeta sua senha...</string>
+    <string name="repeta_sua_senha">Repeta sua senha&#8230;</string>
     <string name="cadastrar">CADASTRAR</string>
     <string name="title_activity_config">ConfigActivity</string>
     <string name="config">Configurações</string>
     <string name="deslogar">DESLOGAR</string>
     <string name="order">Ordenar</string>
+    <string name="recuperar_senha">RECUPERAR SENHA</string>
+    <string name="d">D</string>
+    <string name="s">S</string>
+    <string name="t">T</string>
+    <string name="q">Q</string>
+    <string name="anime_em_lan_amento">Anime em lançamento</string>
 </resources>

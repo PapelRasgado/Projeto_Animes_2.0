@@ -7,12 +7,12 @@
         android:icon="@drawable/ic_search"/>
 
     <item android:title="@string/menu_reordenar" android:id="@+id/list"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_grid"/>
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_linear"/>
 
     <item android:title="@string/order" android:id="@+id/order"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_order"/>
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_alphabetical"/>
 
 
     <item android:title="@string/menu_configuraces" android:id="@+id/config" />

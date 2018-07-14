@@ -2,6 +2,7 @@ package com.jp.projetoanimes.activitys;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.dd.processbutton.iml.ActionProcessButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,7 +34,7 @@ public class CadastroActivity extends AppCompatActivity {
     private AppCompatEditText etEmail;
     private AppCompatEditText etSenha;
     private AppCompatEditText etRepet;
-    private AppCompatButton cadastrar;
+    private ActionProcessButton cadastrar;
 
 
     @Override
@@ -58,18 +60,19 @@ public class CadastroActivity extends AppCompatActivity {
         etSenha = findViewById(R.id.et_cadastro_password);
         etRepet = findViewById(R.id.et_cadastro_repeat_password);
         cadastrar = findViewById(R.id.btn_cadastrar);
+        cadastrar.setMode(ActionProcessButton.Mode.ENDLESS);
 
 
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                cadastrar.setProgress(1);
+                txtEmail.setErrorEnabled(false);
+                txtSenha.setErrorEnabled(false);
+                txtRepet.setErrorEnabled(false);
                 if (!etEmail.getText().toString().isEmpty()) {
-                    txtEmail.setErrorEnabled(false);
                     if (!etSenha.getText().toString().isEmpty()) {
-                        txtSenha.setErrorEnabled(false);
-
                         if (!etRepet.getText().toString().isEmpty()) {
-                            txtRepet.setErrorEnabled(false);
                             if (etSenha.getText().toString().equals(etRepet.getText().toString())){
 
                                 etEmail.setEnabled(false);
@@ -88,9 +91,18 @@ public class CadastroActivity extends AppCompatActivity {
                                                 cadastrar.setEnabled(true);
 
                                                 if (task.isSuccessful()){
+                                                    cadastrar.setProgress(100);
                                                     mAuth.signOut();
-                                                    finish();
+                                                    final Handler handler = new Handler();
+                                                    handler.postDelayed(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            finish();
+                                                        }
+                                                    }, 2000);
+
                                                 } else {
+                                                    cadastrar.setProgress(-1);
                                                     try {
                                                         throw task.getException();
                                                     } catch(FirebaseAuthWeakPasswordException e) {
@@ -109,6 +121,7 @@ public class CadastroActivity extends AppCompatActivity {
                                             }
                                         });
                             } else {
+                                cadastrar.setProgress(-1);
                                 txtSenha.setErrorEnabled(true);
                                 txtSenha.setError("As senhas não combinam!");
                                 txtRepet.setErrorEnabled(true);
@@ -116,15 +129,18 @@ public class CadastroActivity extends AppCompatActivity {
                             }
 
                         } else {
+                            cadastrar.setProgress(-1);
                             txtRepet.setErrorEnabled(true);
                             txtRepet.setError("Repita sua senha!");
                         }
 
                     } else {
+                        cadastrar.setProgress(-1);
                         txtSenha.setErrorEnabled(true);
                         txtSenha.setError("Coloque uma senha!");
                     }
                 } else {
+                    cadastrar.setProgress(-1);
                     txtEmail.setErrorEnabled(true);
                     txtEmail.setError("Coloque um email!");
                 }

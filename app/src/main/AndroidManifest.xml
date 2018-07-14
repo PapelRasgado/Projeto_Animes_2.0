@@ -19,18 +19,25 @@
         <activity
             android:name=".activitys.EditActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".activitys.LoginActivity">
+        <activity
+            android:name=".activitys.LoginActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activitys.CadastroActivity" />
+        <activity
+            android:name=".activitys.CadastroActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activitys.ConfigActivity"
             android:label="@string/title_activity_config"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+
+        <service android:name=".service.NotifyService"/>
+        <receiver android:name=".processes.CriarNotificacao"/>
     </application>
 
 </manifest>

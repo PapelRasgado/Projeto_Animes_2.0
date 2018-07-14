@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -33,6 +34,7 @@ import com.jp.projetoanimes.processes.Codes;
 import com.jp.projetoanimes.types.Anime;
 import com.jp.projetoanimes.tasks.PesquisaTask;
 import com.jp.projetoanimes.R;
+import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -171,11 +173,16 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
                 Intent intent = new Intent(act, DetailsActivity.class);
                 intent.putExtra("anime_detalhe", anime.getIdentifier());
                 intent.putExtra("type", 0);
-                ActivityOptionsCompat options = ActivityOptionsCompat.
-                        makeSceneTransitionAnimation(act,
-                                holder.img,
-                                ViewCompat.getTransitionName(holder.img));
-                act.startActivityForResult(intent, Codes.ANIME_DETAIL, options.toBundle());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ){
+                    ActivityOptionsCompat options = ActivityOptionsCompat.
+                            makeSceneTransitionAnimation(act,
+                                    holder.img,
+                                    ViewCompat.getTransitionName(holder.img));
+                    act.startActivityForResult(intent, Codes.ANIME_DETAIL, options.toBundle());
+                } else {
+                    act.startActivityForResult(intent, Codes.ANIME_DETAIL);
+                }
+
             }
         });
 
@@ -188,6 +195,17 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
                     .load(R.drawable.anime)
                     .into(holder.img);
         }
+
+        if (anime.isStar()){
+            holder.star.setChecked(true);
+        }
+        holder.star.setOnCheckStateChangeListener(new ShineButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(View view, boolean checked) {
+                anime.setStar(checked);
+                myRef.child(anime.getIdentifier()).child("star").setValue(anime.isStar());
+            }
+        });
     }
 
     @Override

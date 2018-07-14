@@ -71,8 +71,8 @@ public class ConcluidoFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    public void mudarOrdenacao(){
-        ordenacao = !ordenacao;
+    public void mudarOrdenacao(boolean newOrdenacao){
+        ordenacao = newOrdenacao;
         mudarManager();
         mudarAdapter();
     }
