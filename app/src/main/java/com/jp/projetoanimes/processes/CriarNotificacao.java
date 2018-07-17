@@ -4,10 +4,14 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Patterns;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -29,13 +33,13 @@ public class CriarNotificacao extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String identifier = intent.getStringExtra("identifier");
         cont = context;
-        myRef = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid()).child(identifier);
+        myRef = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid()).child("listaAtu").child(identifier);
 
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 anime = dataSnapshot.getValue(Anime.class);
-                makeNotificationj();
+                makeNotification();
             }
 
             @Override
@@ -46,7 +50,7 @@ public class CriarNotificacao extends BroadcastReceiver {
         myRef.addListenerForSingleValueEvent(listener);
     }
 
-    private void makeNotificationj() {
+    private void makeNotification() {
         Intent it = new Intent(cont, DetailsActivity.class);
         it.putExtra("anime_detalhe", anime.getIdentifier());
         it.putExtra("type", 0);
@@ -57,6 +61,16 @@ public class CriarNotificacao extends BroadcastReceiver {
         notificacao.setContentTitle("Anime novinho saindo do forno");
         notificacao.setContentText("Hoje tem episódio de " + anime.getNome() + ", se lembre de assistir!");
         notificacao.setContentIntent(p);
+        notificacao.setLargeIcon(BitmapFactory.decodeResource(cont.getResources(),
+                R.drawable.icon_notify));
+        notificacao.setAutoCancel(true);
+        if (Patterns.WEB_URL.matcher(anime.getLink()).matches()){
+            Intent notificationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(anime.getLink()));
+
+            PendingIntent contentIntent = PendingIntent.getActivity(cont, anime.getLink().hashCode(), notificationIntent, 0);
+            notificacao.addAction(R.drawable.ic_link, "Abrir no navegador", contentIntent);
+        }
+
 
         NotificationManagerCompat nm = NotificationManagerCompat.from(cont);
         nm.notify(anime.getIdentifier().hashCode(), notificacao.build());

@@ -218,6 +218,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
             new PesquisaTask(this).execute(nome);
         } else {
             listAtual = new ArrayList<>(listCompleta.values());
+            mudarOrder();
         }
         notifyDataSetChanged();
     }

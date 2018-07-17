@@ -15,6 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -25,6 +26,8 @@ import com.jp.projetoanimes.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import io.fabric.sdk.android.Fabric;
 
 public class AdicionarActivity extends AppCompatActivity {
 
@@ -47,6 +50,7 @@ public class AdicionarActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Fabric.with(this, new Crashlytics());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adicionar);

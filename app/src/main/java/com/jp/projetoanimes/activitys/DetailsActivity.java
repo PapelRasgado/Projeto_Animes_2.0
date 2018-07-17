@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,8 +25,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,7 +38,10 @@ import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.processes.Codes;
 import com.jp.projetoanimes.types.Anime;
 
+import java.util.List;
 import java.util.Objects;
+
+import io.fabric.sdk.android.Fabric;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -63,6 +69,8 @@ public class DetailsActivity extends AppCompatActivity {
     private AppCompatButton maisTemp;
     private AppCompatButton menosTemp;
 
+    private ConstraintLayout calendar;
+
     private FloatingActionButton link;
 
     private ClipboardManager clipboard;
@@ -72,6 +80,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Fabric.with(this, new Crashlytics());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.details_layout);
 
@@ -101,6 +110,8 @@ public class DetailsActivity extends AppCompatActivity {
         menosTemp = findViewById(R.id.btn_detail_menos_temp);
 
         link = findViewById(R.id.btn_fab_open);
+
+        calendar = findViewById(R.id.layout_calendar);
 
         animeI = getIntent().getStringExtra("anime_detalhe") ;
         type = getIntent().getIntExtra("type", -1);
@@ -307,6 +318,47 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if (anime.isLanc()){
+            List<Integer> dias = anime.getDias();
+            ToggleButton sunday = findViewById(R.id.sunday_toggle);
+            sunday.setEnabled(false);
+            if (dias.contains(1)){
+                sunday.setChecked(true);
+            }
+            ToggleButton monday = findViewById(R.id.monday_toggle);
+            monday.setEnabled(false);
+            if (dias.contains(2)){
+                monday.setChecked(true);
+            }
+            ToggleButton tuesday = findViewById(R.id.tuesday_toggle);
+            tuesday.setEnabled(false);
+            if (dias.contains(3)){
+                tuesday.setChecked(true);
+            }
+            ToggleButton wednesday = findViewById(R.id.wednesday_toggle);
+            wednesday.setEnabled(false);
+            if (dias.contains(4)){
+                wednesday .setChecked(true);
+            }
+            ToggleButton thursday = findViewById(R.id.thursday_toggle);
+            thursday.setEnabled(false);
+            if (dias.contains(5)){
+                thursday.setChecked(true);
+            }
+            ToggleButton friday = findViewById(R.id.friday_toggle);
+            friday.setEnabled(false);
+            if (dias.contains(6)){
+                friday.setChecked(true);
+            }
+            ToggleButton saturday = findViewById(R.id.saturday_toggle);
+            saturday.setEnabled(false);
+            if (dias.contains(7)){
+                saturday.setChecked(true);
+            }
+        } else {
+            calendar.setVisibility(View.GONE);
+        }
     }
 
     @Override

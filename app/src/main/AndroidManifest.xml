@@ -38,6 +38,9 @@
 
         <service android:name=".service.NotifyService"/>
         <receiver android:name=".processes.CriarNotificacao"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="410900572bcd61ea6a6812ebbca840a8c8def3ec" />
     </application>
 
 </manifest>

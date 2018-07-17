@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import io.fabric.sdk.android.Fabric;
 
 public class NotifyService extends Service {
 
@@ -38,6 +41,7 @@ public class NotifyService extends Service {
 
     @Override
     public void onCreate() {
+        Fabric.with(this, new Crashlytics());
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         myRef = database.getReference(auth.getUid()).child("listaAtu");
@@ -54,7 +58,21 @@ public class NotifyService extends Service {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                Anime animeN = dataSnapshot.getValue(Anime.class);
+                Anime animeV = listCompleta.get(animeN.getIdentifier());
+                if (animeN.isLanc() && animeV.isLanc()){
+                    if (animeV.isAgend() && !animeN.isAgend()){
+                        agendaNotificacao(proxDay(animeN.getDias()), animeN);
+                    } else if (!animeN.getDias().equals(animeV.getDias())){
+                        cancelNotify(animeN.getIdentifier());
+                        agendaNotificacao(proxDay(animeN.getDias()), animeN);
+                    }
+                } else if (animeV.isLanc() && !animeN.isLanc()){
+                    cancelNotify(animeN.getIdentifier());
+                } else if (!animeV.isLanc() && animeN.isLanc()){
+                    agendaNotificacao(proxDay(animeN.getDias()), animeN);
+                }
+                listCompleta.put(animeN.getIdentifier(), animeN);
             }
 
             @Override
@@ -76,6 +94,7 @@ public class NotifyService extends Service {
 
             }
         };
+        myRef.addChildEventListener(listener);
     }
 
     private int proxDay(List<Integer> diass){
@@ -94,14 +113,21 @@ public class NotifyService extends Service {
             proxDia = diass.get(0);
         }
         int diasFuturos = proxDia-dia;
-        return diasFuturos < 1 ? diasFuturos+7 : diasFuturos;
+        return diasFuturos < 0 ? diasFuturos+7 : diasFuturos;
     }
 
     private void agendaNotificacao(int diasFuturos, Anime anime){
         Date data = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(data);
-        c.add(Calendar.DATE, diasFuturos);
+        if (diasFuturos == 0 && c.get(Calendar.HOUR_OF_DAY) >= 12){
+            c.add(Calendar.DATE, 7);
+        } else {
+            c.add(Calendar.DATE, diasFuturos);
+        }
+        c.set(Calendar.HOUR_OF_DAY, 12);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
 
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(ALARM_SERVICE);
         Intent it = new Intent(this, CriarNotificacao.class);

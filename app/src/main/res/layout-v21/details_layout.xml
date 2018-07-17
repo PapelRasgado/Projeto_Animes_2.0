@@ -414,6 +414,175 @@
 
             </android.support.constraint.ConstraintLayout>
 
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:id="@+id/layout_calendar">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/txt_calendar_info"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/dias_de_lan_amento"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/img_calendar"
+                    app:layout_constraintTop_toBottomOf="@+id/dias" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/img_calendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/ic_calendar"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/dias"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/img_calendar"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0">
+
+                    <ToggleButton
+                        android:id="@+id/sunday_toggle"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/circle_toggle_button"
+                        android:text="New ToggleButton"
+                        android:textColor="@android:color/white"
+                        android:textOff="@string/d"
+                        android:textOn="@string/d"
+                        android:textSize="22sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/monday_toggle"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ToggleButton
+                        android:id="@+id/monday_toggle"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/circle_toggle_button"
+                        android:text="New ToggleButton"
+                        android:textColor="@android:color/white"
+                        android:textOff="@string/s"
+                        android:textOn="@string/s"
+                        android:textSize="22sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tuesday_toggle"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/sunday_toggle"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <ToggleButton
+                        android:id="@+id/tuesday_toggle"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/circle_toggle_button"
+                        android:text="New ToggleButton"
+                        android:textColor="@android:color/white"
+                        android:textOff="@string/t"
+                        android:textOn="@string/t"
+                        android:textSize="22sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/wednesday_toggle"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/monday_toggle"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ToggleButton
+                        android:id="@+id/wednesday_toggle"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/circle_toggle_button"
+                        android:text="New ToggleButton"
+                        android:textColor="@android:color/white"
+                        android:textOff="@string/q"
+                        android:textOn="@string/q"
+                        android:textSize="22sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/thursday_toggle"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/tuesday_toggle"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <ToggleButton
+                        android:id="@+id/thursday_toggle"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/circle_toggle_button"
+                        android:text="New ToggleButton"
+                        android:textColor="@android:color/white"
+                        android:textOff="@string/q"
+                        android:textOn="@string/q"
+                        android:textSize="22sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/friday_toggle"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/wednesday_toggle"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ToggleButton
+                        android:id="@+id/friday_toggle"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/circle_toggle_button"
+                        android:text="New ToggleButton"
+                        android:textColor="@android:color/white"
+                        android:textOff="@string/s"
+                        android:textOn="@string/s"
+                        android:textSize="22sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/saturday_toggle"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/thursday_toggle"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ToggleButton
+                        android:id="@+id/saturday_toggle"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/circle_toggle_button"
+                        android:text="New ToggleButton"
+                        android:textColor="@android:color/white"
+                        android:textOff="@string/s"
+                        android:textOn="@string/s"
+                        android:textSize="22sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/friday_toggle"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+            </android.support.constraint.ConstraintLayout>
+
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

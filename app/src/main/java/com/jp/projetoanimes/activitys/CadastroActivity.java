@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.crashlytics.android.Crashlytics;
 import com.dd.processbutton.iml.ActionProcessButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,6 +25,8 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.jp.projetoanimes.R;
 
 import java.util.Objects;
+
+import io.fabric.sdk.android.Fabric;
 
 public class CadastroActivity extends AppCompatActivity {
 
@@ -39,7 +42,7 @@ public class CadastroActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
+        Fabric.with(this, new Crashlytics());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cadastro_layout);
 
@@ -88,7 +91,7 @@ public class CadastroActivity extends AppCompatActivity {
                                                 etEmail.setEnabled(true);
                                                 etSenha.setEnabled(true);
                                                 etRepet.setEnabled(true);
-                                                cadastrar.setEnabled(true);
+
 
                                                 if (task.isSuccessful()){
                                                     cadastrar.setProgress(100);
@@ -102,6 +105,7 @@ public class CadastroActivity extends AppCompatActivity {
                                                     }, 2000);
 
                                                 } else {
+                                                    cadastrar.setEnabled(true);
                                                     cadastrar.setProgress(-1);
                                                     try {
                                                         throw task.getException();

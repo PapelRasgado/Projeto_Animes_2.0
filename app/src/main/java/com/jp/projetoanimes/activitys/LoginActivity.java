@@ -11,6 +11,7 @@ import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
 import android.view.View;
 
+import com.crashlytics.android.Crashlytics;
 import com.dd.processbutton.iml.ActionProcessButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -18,7 +19,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.jp.projetoanimes.R;
+import com.jp.projetoanimes.service.NotifyService;
 import com.jp.projetoanimes.types.RecoveryDialog;
+import io.fabric.sdk.android.Fabric;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,8 +37,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
+        Fabric.with(this, new Crashlytics());
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.login_layout);
 
         txtEmail = findViewById(R.id.txt_login_email);
@@ -66,8 +70,8 @@ public class LoginActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         etEmail.setEnabled(true);
                                         etSenha.setEnabled(true);
-                                        logar.setEnabled(true);
                                         if (task.isSuccessful()) {
+                                            startService(new Intent(LoginActivity.this, NotifyService.class));
                                             logar.setProgress(100);
                                             final Handler handler = new Handler();
                                             handler.postDelayed(new Runnable() {
@@ -79,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 }
                                             }, 2000);
                                         } else {
+                                            logar.setEnabled(true);
                                             logar.setProgress(-1);
                                             try {
                                                 throw task.getException();

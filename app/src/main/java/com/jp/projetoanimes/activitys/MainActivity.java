@@ -9,11 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,10 +29,11 @@ import com.jp.projetoanimes.types.Anime;
 import com.jp.projetoanimes.types.InputDialog;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
+import io.fabric.sdk.android.Fabric;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    static private boolean init = true;
 
     private FloatingActionButton fab;
     private AtualFragment atual;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     static private boolean ordenacao;
 
-    FirebaseDatabase database;
+    private FirebaseDatabase database;
 
     static private MenuItem reorder;
     static private MenuItem ordering;
@@ -55,49 +56,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        database = FirebaseDatabase.getInstance();
 
-        if (init) {
-            init = false;
+        database = FirebaseDatabase.getInstance();
+        Fabric.with(this, new Crashlytics());
+
+        if (!getSharedPreferences("FIRST_TIME", MODE_PRIVATE).contains("teste")) {
+            SharedPreferences.Editor editor = getSharedPreferences("FIRST_TIME", MODE_PRIVATE).edit();
+            editor.putInt("teste", 1);
+            editor.apply();
             database.setPersistenceEnabled(true);
         }
-
-        database.getReference(FirebaseAuth.getInstance().getUid()).child("order").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Anime.setOrder(dataSnapshot.getValue(String.class));
-                if (Anime.order.equals("ABC") || Anime.order.equals("CBA")) {
-                    ordering.setIcon(R.drawable.ic_alphabetical);
-                } else {
-                    ordering.setIcon(R.drawable.ic_timer);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        database.getReference(FirebaseAuth.getInstance().getUid()).child("ordenacao").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    ordenacao = dataSnapshot.getValue(Boolean.class);
-                    if (ordenacao) {
-                        reorder.setIcon(R.drawable.ic_grid);
-                        atual.mudarOrdenacao(ordenacao);
-                        conc.mudarOrdenacao(ordenacao);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -232,6 +200,43 @@ public class MainActivity extends AppCompatActivity {
 
         reorder = menu.findItem(R.id.list);
         ordering = menu.findItem(R.id.order);
+
+        database.getReference(FirebaseAuth.getInstance().getUid()).child("order").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Anime.setOrder(dataSnapshot.getValue(String.class));
+                if (Anime.order.equals("ABC") || Anime.order.equals("CBA")) {
+                    ordering.setIcon(R.drawable.ic_alphabetical);
+                } else {
+                    ordering.setIcon(R.drawable.ic_timer);
+                }
+                atual.atualizar();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        database.getReference(FirebaseAuth.getInstance().getUid()).child("ordenacao").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    ordenacao = dataSnapshot.getValue(Boolean.class);
+                    if (ordenacao) {
+                        reorder.setIcon(R.drawable.ic_grid);
+                        atual.mudarOrdenacao(ordenacao);
+                        conc.mudarOrdenacao(ordenacao);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         return super.onCreateOptionsMenu(menu);
     }

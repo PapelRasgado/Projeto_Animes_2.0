@@ -16,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +29,8 @@ import com.jp.projetoanimes.types.Anime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import io.fabric.sdk.android.Fabric;
 
 public class EditActivity extends AppCompatActivity {
 
@@ -61,7 +64,7 @@ public class EditActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        Fabric.with(this, new Crashlytics());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adicionar);
 
@@ -229,7 +232,7 @@ public class EditActivity extends AppCompatActivity {
                             database.getReference(user).child("listaAtu").child(anime.getIdentifier()).setValue(anime);
                             break;
                         case 1:
-                            database.getReference(user).child("listaCoc").child(anime.getIdentifier()).setValue(anime);
+                            database.getReference(user).child("listaConc").child(anime.getIdentifier()).setValue(anime);
                             break;
                     }
                     setResult(Codes.ANIME_MODIFY);
