@@ -19,9 +19,9 @@ import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.types.Anime;
 import com.jp.projetoanimes.R;
+import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.types.FirebaseManager;
 
 import java.util.ArrayList;

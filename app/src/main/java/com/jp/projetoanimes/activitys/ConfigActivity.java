@@ -11,8 +11,8 @@ import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
 import com.jp.projetoanimes.R;
-import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.service.NotifyService;
+import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.types.FirebaseManager;
 
 import java.util.Objects;

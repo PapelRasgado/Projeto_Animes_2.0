@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.jp.projetoanimes.R;
+import com.jp.projetoanimes.types.FirebaseManager;
 
 import java.util.Objects;
 
@@ -54,7 +55,7 @@ public class CadastroActivity extends AppCompatActivity {
             Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         }
 
-        mAuth = FirebaseManeger.;
+        mAuth = FirebaseManager.getAuth();
 
         txtEmail = findViewById(R.id.txt_cadastro_email);
         txtSenha = findViewById(R.id.txt_cadastro_password);

@@ -23,8 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.activitys.AdicionarActivity;
-import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.tasks.PesquisaSuTask;
+import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.types.FirebaseManager;
 
 import java.util.ArrayList;

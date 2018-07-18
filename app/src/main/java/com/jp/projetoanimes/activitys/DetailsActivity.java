@@ -35,8 +35,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jp.projetoanimes.R;
-import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.types.Anime;
+import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.types.FirebaseManager;
 
 import java.util.List;

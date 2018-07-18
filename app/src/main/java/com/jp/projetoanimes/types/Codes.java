@@ -1,4 +1,4 @@
-package com.jp.projetoanimes.processes;
+package com.jp.projetoanimes.types;
 
 public class Codes {
     public static final int ANIME_DETAIL = 100;
