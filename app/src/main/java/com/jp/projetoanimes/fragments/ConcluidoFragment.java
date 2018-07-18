@@ -87,12 +87,8 @@ public class ConcluidoFragment extends Fragment {
         adapter.apagar(identifier, recyclerView);
     }
 
-    public  void atualizar() {
-        if (adapter != null){
-            adapter.atualizarItens();
-        }
+
+    public static AdapterCon getAdapter() {
+        return adapter;
     }
-
-
-
 }

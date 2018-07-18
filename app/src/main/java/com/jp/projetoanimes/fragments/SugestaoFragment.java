@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import android.view.ViewGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.adapters.AdapterSu;
+import com.jp.projetoanimes.types.FirebaseManager;
 
 @SuppressLint("StaticFieldLeak")
 public class SugestaoFragment extends Fragment {
@@ -24,13 +24,12 @@ public class SugestaoFragment extends Fragment {
 
     static private RecyclerView recyclerView;
     static private AdapterSu adapter;
-    static private ItemTouchHelper touchHelper;
 
     static private LayoutInflater inf;
     static private Activity act;
 
     public SugestaoFragment(){
-        auth = FirebaseAuth.getInstance();
+        auth = FirebaseManager.getAuth();
     }
 
     @Override

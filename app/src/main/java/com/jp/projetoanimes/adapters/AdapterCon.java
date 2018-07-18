@@ -30,11 +30,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.activitys.DetailsActivity;
-import com.jp.projetoanimes.processes.Codes;
+import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.tasks.PesquisaConTask;
 import com.jp.projetoanimes.types.Anime;
+import com.jp.projetoanimes.types.FirebaseManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,8 +52,8 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon>{
 
     public AdapterCon(Activity act, boolean ordenacao) {
         this.act = act;
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseDatabase database = FirebaseManager.getDatabase();
+        FirebaseAuth auth = FirebaseManager.getAuth();
         myRef = database.getReference(auth.getUid()).child("listaConc");
         usuRef = database.getReference(auth.getUid());
         this.listCompleta = new HashMap<>();
@@ -61,6 +63,7 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon>{
                 listCompleta.put(s, dataSnapshot.getValue(Anime.class));
                 listAtual.add(dataSnapshot.getValue(Anime.class));
                 notifyItemInserted(listAtual.size()-1);
+                mudarOrder();
             }
 
             @Override
@@ -222,7 +225,7 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon>{
         if (b) {
             new PesquisaConTask(this).execute(nome);
         } else {
-            listAtual = new ArrayList<>(listCompleta.values());
+            atualizarItens();
         }
         notifyDataSetChanged();
     }
@@ -281,6 +284,14 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon>{
 
     public void atualizarItens(){
         listAtual = new ArrayList<>(listCompleta.values());
+        mudarOrder();
+    }
+
+    private void mudarOrder(){
+        Collections.sort(listAtual);
+        if (Anime.order.equals("CBA") || Anime.order.equals("321")){
+            Collections.reverse(listAtual);
+        }
         notifyDataSetChanged();
     }
 }

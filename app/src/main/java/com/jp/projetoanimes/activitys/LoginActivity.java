@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.service.NotifyService;
+import com.jp.projetoanimes.types.FirebaseManager;
 import com.jp.projetoanimes.types.RecoveryDialog;
 import io.fabric.sdk.android.Fabric;
 
@@ -37,10 +38,11 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Fabric.with(this, new Crashlytics());
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.login_layout);
+
+
 
         txtEmail = findViewById(R.id.txt_login_email);
         txtSenha = findViewById(R.id.txt_login_password);
@@ -133,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseManager.getAuth();
         if (mAuth.getCurrentUser() != null) {
             finish();
             Intent it = new Intent(this, MainActivity.class);

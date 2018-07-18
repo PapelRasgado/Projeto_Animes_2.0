@@ -3,8 +3,6 @@ package com.jp.projetoanimes.activitys;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
@@ -12,10 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.firebase.auth.FirebaseAuth;
 import com.jp.projetoanimes.R;
-import com.jp.projetoanimes.processes.Codes;
+import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.service.NotifyService;
+import com.jp.projetoanimes.types.FirebaseManager;
 
 import java.util.Objects;
 
@@ -42,7 +40,7 @@ public class ConfigActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 stopService(new Intent(ConfigActivity.this, NotifyService.class));
-                FirebaseAuth.getInstance().signOut();
+                FirebaseManager.getAuth().signOut();
                 setResult(Codes.CONFIG_LOGOUT);
                 finish();
             }

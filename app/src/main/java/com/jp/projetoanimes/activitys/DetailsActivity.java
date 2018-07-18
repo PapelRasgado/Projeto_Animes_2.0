@@ -35,8 +35,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jp.projetoanimes.R;
-import com.jp.projetoanimes.processes.Codes;
+import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.types.Anime;
+import com.jp.projetoanimes.types.FirebaseManager;
 
 import java.util.List;
 import java.util.Objects;
@@ -121,9 +122,9 @@ public class DetailsActivity extends AppCompatActivity {
             Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         }
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseManager.getAuth();
         user = auth.getUid();
-        database = FirebaseDatabase.getInstance();
+        database = FirebaseManager.getDatabase();
 
         listener = new ValueEventListener() {
             @Override

@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -13,15 +12,14 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Patterns;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.activitys.DetailsActivity;
 import com.jp.projetoanimes.types.Anime;
+import com.jp.projetoanimes.types.FirebaseManager;
 
 public class CriarNotificacao extends BroadcastReceiver {
 
@@ -33,7 +31,7 @@ public class CriarNotificacao extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String identifier = intent.getStringExtra("identifier");
         cont = context;
-        myRef = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getUid()).child("listaAtu").child(identifier);
+        myRef = FirebaseManager.getDatabase().getReference(FirebaseManager.getAuth().getUid()).child("listaAtu").child(identifier);
 
         ValueEventListener listener = new ValueEventListener() {
             @Override

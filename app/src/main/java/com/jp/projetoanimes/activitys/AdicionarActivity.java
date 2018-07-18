@@ -19,9 +19,10 @@ import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.jp.projetoanimes.processes.Codes;
+import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.types.Anime;
 import com.jp.projetoanimes.R;
+import com.jp.projetoanimes.types.FirebaseManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,9 +65,9 @@ public class AdicionarActivity extends AppCompatActivity {
             Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         }
 
-        auth = FirebaseAuth.getInstance();
+        auth = FirebaseManager.getAuth();
         user = auth.getUid();
-        database = FirebaseDatabase.getInstance();
+        database = FirebaseManager.getDatabase();
 
         txtNome = findViewById(R.id.txt_input);
         etNome = findViewById(R.id.et_nome);

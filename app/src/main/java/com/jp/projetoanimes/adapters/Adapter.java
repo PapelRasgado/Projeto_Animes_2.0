@@ -30,10 +30,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jp.projetoanimes.activitys.DetailsActivity;
-import com.jp.projetoanimes.processes.Codes;
+import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.types.Anime;
 import com.jp.projetoanimes.tasks.PesquisaTask;
 import com.jp.projetoanimes.R;
+import com.jp.projetoanimes.types.FirebaseManager;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.util.ArrayList;
@@ -52,8 +53,8 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
     public Adapter(Activity act, boolean ordenacao) {
         this.act = act;
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseDatabase database = FirebaseManager.getDatabase();
+        FirebaseAuth auth = FirebaseManager.getAuth();
         myRef = database.getReference(auth.getUid()).child("listaAtu");
         this.listCompleta = new HashMap<>();
         ChildEventListener listener = new ChildEventListener() {
@@ -275,27 +276,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         mudarOrder();
     }
 
-    public void changeOrder(){
-        switch (Anime.order){
-            case "ABC":
-                Anime.setOrder("CBA");
-                Toast.makeText(act, "Ordenado por nome decrescente!", Toast.LENGTH_SHORT).show();
-                break;
-            case "CBA":
-                Anime.setOrder("123");
-                Toast.makeText(act, "Ordenado por data crescente!", Toast.LENGTH_SHORT).show();
-                break;
-            case "123":
-                Anime.setOrder("321");
-                Toast.makeText(act, "Ordenado por data decrescente!", Toast.LENGTH_SHORT).show();
-                break;
-            case "321":
-                Anime.setOrder("ABC");
-                Toast.makeText(act, "Ordenado por nome crescente!", Toast.LENGTH_SHORT).show();
-                break;
-        }
-        mudarOrder();
-    }
+
 
     private void mudarOrder(){
         Collections.sort(listAtual);

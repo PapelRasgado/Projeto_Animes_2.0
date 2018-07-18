@@ -54,7 +54,7 @@ public class CadastroActivity extends AppCompatActivity {
             Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         }
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseManeger.;
 
         txtEmail = findViewById(R.id.txt_cadastro_email);
         txtSenha = findViewById(R.id.txt_cadastro_password);

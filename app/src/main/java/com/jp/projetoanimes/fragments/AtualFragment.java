@@ -89,16 +89,7 @@ public class AtualFragment extends Fragment {
         adapter.apagar(identifier, recyclerView);
     }
 
-    public  void atualizar() {
-        if (adapter != null){
-            adapter.atualizarItens();
-        }
+    public static Adapter getAdapter() {
+        return adapter;
     }
-
-    public void changeOrder(){
-        adapter.changeOrder();
-    }
-
-
-
 }

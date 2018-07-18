@@ -23,8 +23,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jp.projetoanimes.R;
-import com.jp.projetoanimes.processes.Codes;
+import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.types.Anime;
+import com.jp.projetoanimes.types.FirebaseManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,9 +73,9 @@ public class EditActivity extends AppCompatActivity {
         toolbar.setTitle("Editar Anime");
         setSupportActionBar(toolbar);
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseManager.getAuth();
         user = auth.getUid();
-        database = FirebaseDatabase.getInstance();
+        database = FirebaseManager.getDatabase();
 
         String animeI = getIntent().getStringExtra("anime_detalhe");
         type = getIntent().getIntExtra("type", -1);

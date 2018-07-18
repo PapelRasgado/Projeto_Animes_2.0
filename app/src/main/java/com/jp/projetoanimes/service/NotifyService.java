@@ -3,7 +3,6 @@ package com.jp.projetoanimes.service;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -18,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jp.projetoanimes.processes.CriarNotificacao;
 import com.jp.projetoanimes.types.Anime;
+import com.jp.projetoanimes.types.FirebaseManager;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -42,8 +42,8 @@ public class NotifyService extends Service {
     @Override
     public void onCreate() {
         Fabric.with(this, new Crashlytics());
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseDatabase database = FirebaseManager.getDatabase();
+        FirebaseAuth auth = FirebaseManager.getAuth();
         myRef = database.getReference(auth.getUid()).child("listaAtu");
         listCompleta = new HashMap<>();
         ChildEventListener listener = new ChildEventListener() {

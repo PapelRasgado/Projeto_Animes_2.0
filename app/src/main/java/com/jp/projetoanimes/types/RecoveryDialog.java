@@ -13,17 +13,12 @@ import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 
 import com.dd.processbutton.iml.ActionProcessButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.jp.projetoanimes.R;
-import com.jp.projetoanimes.fragments.SugestaoFragment;
 
 @SuppressLint("InflateParams")
 public class RecoveryDialog extends AlertDialog.Builder implements
@@ -73,7 +68,7 @@ public class RecoveryDialog extends AlertDialog.Builder implements
             txt.setErrorEnabled(true);
             txt.setError("Digite um email!");
         }else{
-            FirebaseAuth.getInstance().sendPasswordResetEmail(et.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            FirebaseManager.getAuth().sendPasswordResetEmail(et.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()){

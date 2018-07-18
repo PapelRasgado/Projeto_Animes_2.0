@@ -1,7 +1,6 @@
 package com.jp.projetoanimes.activitys;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -12,9 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -24,8 +23,9 @@ import com.jp.projetoanimes.adapters.TabsAdapter;
 import com.jp.projetoanimes.fragments.AtualFragment;
 import com.jp.projetoanimes.fragments.ConcluidoFragment;
 import com.jp.projetoanimes.fragments.SugestaoFragment;
-import com.jp.projetoanimes.processes.Codes;
+import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.types.Anime;
+import com.jp.projetoanimes.types.FirebaseManager;
 import com.jp.projetoanimes.types.InputDialog;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
@@ -57,15 +57,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
 
-        database = FirebaseDatabase.getInstance();
+        database = FirebaseManager.getDatabase();
         Fabric.with(this, new Crashlytics());
-
-        if (!getSharedPreferences("FIRST_TIME", MODE_PRIVATE).contains("teste")) {
-            SharedPreferences.Editor editor = getSharedPreferences("FIRST_TIME", MODE_PRIVATE).edit();
-            editor.putInt("teste", 1);
-            editor.apply();
-            database.setPersistenceEnabled(true);
-        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -101,10 +94,10 @@ public class MainActivity extends AppCompatActivity {
                 tabAtual = tab.getPosition();
                 switch (tabAtual) {
                     case 1:
-                        atual.atualizar();
+                        AtualFragment.getAdapter().atualizarItens();
                         break;
                     case 2:
-                        conc.atualizar();
+                        ConcluidoFragment.getAdapter().atualizarItens();
                         break;
                 }
             }
@@ -201,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
         reorder = menu.findItem(R.id.list);
         ordering = menu.findItem(R.id.order);
 
-        database.getReference(FirebaseAuth.getInstance().getUid()).child("order").addListenerForSingleValueEvent(new ValueEventListener() {
+        database.getReference(FirebaseManager.getAuth().getUid()).child("order").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Anime.setOrder(dataSnapshot.getValue(String.class));
@@ -210,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     ordering.setIcon(R.drawable.ic_timer);
                 }
-                atual.atualizar();
+                atual.getAdapter().atualizarItens();
             }
 
             @Override
@@ -219,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        database.getReference(FirebaseAuth.getInstance().getUid()).child("ordenacao").addListenerForSingleValueEvent(new ValueEventListener() {
+        database.getReference(FirebaseManager.getAuth().getUid()).child("ordenacao").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -254,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
                     ordenacao = false;
                 }
 
-                database.getReference(FirebaseAuth.getInstance().getUid()).child("ordenacao").setValue(ordenacao);
+                database.getReference(FirebaseManager.getAuth().getUid()).child("ordenacao").setValue(ordenacao);
 
                 atual.mudarOrdenacao(ordenacao);
                 conc.mudarOrdenacao(ordenacao);
@@ -266,21 +259,33 @@ public class MainActivity extends AppCompatActivity {
             case R.id.about:
                 break;
             case R.id.order:
-                switch (tabAtual) {
-                    case 1:
-                        atual.changeOrder();
-                        if (Anime.order.equals("ABC") || Anime.order.equals("CBA")) {
-                            item.setIcon(R.drawable.ic_alphabetical);
-                        } else {
-                            item.setIcon(R.drawable.ic_timer);
-                        }
-
-                        database.getReference(FirebaseAuth.getInstance().getUid()).child("order").setValue(Anime.order);
+                switch (Anime.order){
+                    case "ABC":
+                        Anime.setOrder("CBA");
+                        Toast.makeText(this, "Ordenado por nome decrescente!", Toast.LENGTH_SHORT).show();
                         break;
-                    case 2:
+                    case "CBA":
+                        Anime.setOrder("123");
+                        Toast.makeText(this, "Ordenado por data crescente!", Toast.LENGTH_SHORT).show();
+                        break;
+                    case "123":
+                        Anime.setOrder("321");
+                        Toast.makeText(this, "Ordenado por data decrescente!", Toast.LENGTH_SHORT).show();
+                        break;
+                    case "321":
+                        Anime.setOrder("ABC");
+                        Toast.makeText(this, "Ordenado por nome crescente!", Toast.LENGTH_SHORT).show();
                         break;
                 }
-                break;
+                AtualFragment.getAdapter().atualizarItens();
+                ConcluidoFragment.getAdapter().atualizarItens();
+                if (Anime.order.equals("ABC") || Anime.order.equals("CBA")) {
+                    item.setIcon(R.drawable.ic_alphabetical);
+                } else {
+                    item.setIcon(R.drawable.ic_timer);
+                }
+
+                database.getReference(FirebaseManager.getAuth().getUid()).child("order").setValue(Anime.order);
         }
         return true;
     }
@@ -295,12 +300,12 @@ public class MainActivity extends AppCompatActivity {
             if (mSearch.isSearchOpen()) {
                 mSearch.closeSearch();
             }
-            atual.atualizar();
+            AtualFragment.getAdapter().atualizarItens();
         } else if (requestCode == Codes.ANIME_DETAIL && resultCode == Codes.ANIME_MODIFY_CONC) {
             if (mSearch.isSearchOpen()) {
                 mSearch.closeSearch();
             }
-            conc.atualizar();
+            ConcluidoFragment.getAdapter().atualizarItens();
         } else if (requestCode == Codes.ANIME_ADD && resultCode == Codes.ANIME_ADDED) {
             if (mSearch.isSearchOpen()) {
                 mSearch.closeSearch();
