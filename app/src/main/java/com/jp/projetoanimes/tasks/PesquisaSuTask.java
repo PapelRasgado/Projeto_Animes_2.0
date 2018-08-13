@@ -3,11 +3,12 @@ package com.jp.projetoanimes.tasks;
 import android.os.AsyncTask;
 
 import com.jp.projetoanimes.adapters.AdapterSu;
+import com.jp.projetoanimes.types.Sugestao;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PesquisaSuTask extends AsyncTask<String, Void, List<String>> {
+public class PesquisaSuTask extends AsyncTask<String, Void, List<Sugestao>> {
 
     private AdapterSu adapter;
 
@@ -16,11 +17,11 @@ public class PesquisaSuTask extends AsyncTask<String, Void, List<String>> {
     }
 
     @Override
-    protected List<String> doInBackground(String... strings) {
-        List<String> listaC = new ArrayList<>(adapter.getListCompleta().values());
-        List<String> listaA = new ArrayList<>();
-        for (String s: listaC) {
-            if(s.toLowerCase().contains(strings[0].toLowerCase())){
+    protected List<Sugestao> doInBackground(String... strings) {
+        List<Sugestao> listaC = new ArrayList<>(adapter.getListCompleta().values());
+        List<Sugestao> listaA = new ArrayList<>();
+        for (Sugestao s: listaC) {
+            if(s.getNome().toLowerCase().contains(strings[0].toLowerCase())){
                 listaA.add(s);
             }
         }
@@ -28,7 +29,7 @@ public class PesquisaSuTask extends AsyncTask<String, Void, List<String>> {
     }
 
     @Override
-    protected void onPostExecute(List<String> lista) {
+    protected void onPostExecute(List<Sugestao> lista) {
         adapter.setListAtual(lista);
     }
 }

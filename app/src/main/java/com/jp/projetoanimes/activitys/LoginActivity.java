@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.jp.projetoanimes.R;
 import com.jp.projetoanimes.service.NotifyService;
 import com.jp.projetoanimes.types.FirebaseManager;
-import com.jp.projetoanimes.types.RecoveryDialog;
+import com.jp.projetoanimes.dialogs.RecoveryDialog;
 import io.fabric.sdk.android.Fabric;
 
 public class LoginActivity extends AppCompatActivity {

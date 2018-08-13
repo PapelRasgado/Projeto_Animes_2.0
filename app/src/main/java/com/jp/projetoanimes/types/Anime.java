@@ -34,8 +34,6 @@ public class Anime implements Serializable, Comparable<Anime> {
 
     private List<Integer> dias;
 
-    public static String order = "ABC";
-
 
     public Anime(String nome, int ep, int temp, String notas, String image, String link, List<Integer> dias , boolean lanc) {
         this.nome = nome;
@@ -159,15 +157,16 @@ public class Anime implements Serializable, Comparable<Anime> {
 
     @Override
     public int compareTo(@NonNull Anime o) {
-        if (order.equals("ABC") || order.equals("CBA")){
-            return nome.compareTo(o.nome);
-        } else {
-            return data.compareTo(o.getData());
+        switch (Codes.order) {
+            case "ABC":
+                return nome.compareTo(o.nome);
+            case "CBA":
+                return nome.compareTo(o.nome) * -1;
+            case "123":
+                return data.compareTo(o.getData());
+            default:
+                return data.compareTo(o.getData()) * -1;
         }
-    }
-
-    public static void setOrder(String newOrder){
-        order = newOrder;
     }
 
     public void setDias(List<Integer> dias) {

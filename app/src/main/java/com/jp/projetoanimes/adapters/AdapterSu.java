@@ -26,8 +26,10 @@ import com.jp.projetoanimes.activitys.AdicionarActivity;
 import com.jp.projetoanimes.tasks.PesquisaSuTask;
 import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.types.FirebaseManager;
+import com.jp.projetoanimes.types.Sugestao;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,8 +37,8 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> {
 
     private DatabaseReference myRef;
 
-    private HashMap<String, String> listCompleta;
-    private List<String> listAtual;
+    private HashMap<String, Sugestao> listCompleta;
+    private List<Sugestao> listAtual;
     private Activity act;
 
 
@@ -45,24 +47,25 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> {
 
         listCompleta = new HashMap<>();
         FirebaseDatabase database = FirebaseManager.getDatabase();
-        myRef = database.getReference(user + "/listaSug");
+        myRef = database.getReference(user + "/listaSuge");
         ChildEventListener listener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                listCompleta.put(s, dataSnapshot.getValue(String.class));
-                listAtual.add(dataSnapshot.getValue(String.class));
-                notifyItemInserted(listAtual.size()-1);
+                listCompleta.put(s, dataSnapshot.getValue(Sugestao.class));
+                listAtual.add(dataSnapshot.getValue(Sugestao.class));
+                notifyItemInserted(listAtual.size() - 1);
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                listCompleta.put(s, dataSnapshot.getValue(String.class));
+                Sugestao sug = dataSnapshot.getValue(Sugestao.class);
+                listCompleta.put(sug.getIdentifier(), sug);
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 listCompleta.remove(dataSnapshot.getKey());
-                listAtual.remove(dataSnapshot.getValue(String.class));
+                listAtual.remove(dataSnapshot.getValue(Sugestao.class));
                 notifyDataSetChanged();
             }
 
@@ -95,13 +98,32 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> {
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderSu holder, int position) {
-        final String anime = listAtual.get(position);
-        holder.titulo.setText(anime);
+        final Sugestao sug = listAtual.get(position);
+        holder.titulo.setText(sug.getNome());
+
+        switch (sug.getPrioridade()) {
+            case 0:
+                holder.background.setBackgroundColor(act.getResources().getColor(R.color.red));
+                break;
+            case 1:
+                holder.background.setBackgroundColor(act.getResources().getColor(R.color.yellow_red));
+                break;
+            case 2:
+                holder.background.setBackgroundColor(act.getResources().getColor(R.color.yellow));
+                break;
+            case 3:
+                holder.background.setBackgroundColor(act.getResources().getColor(R.color.green_yellow));
+                break;
+            case 4:
+                holder.background.setBackgroundColor(act.getResources().getColor(R.color.green));
+                break;
+        }
+
         holder.titulo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) act.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Nome do anime", anime);
+                ClipData clip = ClipData.newPlainText("Nome do anime", sug.getNome());
                 assert clipboard != null;
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(act, "Nome copiado!", Toast.LENGTH_SHORT).show();
@@ -110,7 +132,7 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> {
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                delete(anime);
+                delete(sug);
             }
         });
         holder.btnSend.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +150,7 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> {
     }
 
     private void send(final int position) {
-        final String a = listAtual.get(position);
+        final String a = listAtual.get(position).getNome();
         new AlertDialog.Builder(act, R.style.AlertTheme)
                 .setTitle("Deseja enviar esse anime para a tela de edição?")
                 .setMessage("Nome: " + a)
@@ -156,16 +178,17 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> {
     }
 
 
-    private void delete(final String anime) {
+    private void delete(final Sugestao sug) {
         new AlertDialog.Builder(act, R.style.AlertTheme)
                 .setTitle("Deseja apagar esse anime?")
-                .setMessage("Nome: " +anime)
+                .setMessage("Nome: " + sug.getNome())
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        notifyItemRemoved(listAtual.indexOf(anime));
-                        myRef.child(anime).removeValue();
-                        listAtual.remove(anime);
+                        final int index = listAtual.indexOf(sug);
+                        notifyItemRemoved(index);
+                        myRef.child(sug.getIdentifier()).removeValue();
+                        listAtual.remove(sug);
 
                         final Snackbar snackbar = Snackbar.make(act.findViewById(R.id.btn_fab_add), "ANIME APAGADO", Snackbar.LENGTH_LONG);
                         snackbar.setAction("DESFAZER", new View.OnClickListener() {
@@ -177,7 +200,8 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> {
                                 if (clicou) {
                                     clicou = false;
                                     snackbar.dismiss();
-                                    myRef.child(anime).setValue(anime);
+                                    myRef.child(sug.getIdentifier()).setValue(sug);
+                                    notifyItemInserted(index);
                                 }
                             }
                         });
@@ -198,8 +222,11 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> {
                 .show();
     }
 
-    public void adicionar(String nome){
-        myRef.child(nome).setValue(nome);
+    public void adicionar(Sugestao sug) {
+
+        DatabaseReference data = myRef.push();
+        sug.setIdentifier(data.getKey());
+        data.setValue(sug);
     }
 
     public void fazerPesquisa(boolean b, String nome) {
@@ -208,17 +235,29 @@ public class AdapterSu extends RecyclerView.Adapter<ViewHolderSu> {
             new PesquisaSuTask(this).execute(nome);
         } else {
             listAtual = new ArrayList<>(listCompleta.values());
+            mudarOrder();
         }
         notifyDataSetChanged();
     }
 
-    public HashMap<String, String> getListCompleta() {
+    public HashMap<String, Sugestao> getListCompleta() {
         return listCompleta;
     }
 
 
-    public void setListAtual(List<String> listAtual) {
+    public void setListAtual(List<Sugestao> listAtual) {
         this.listAtual = listAtual;
+        mudarOrder();
         notifyDataSetChanged();
+    }
+
+    private void mudarOrder() {
+        Collections.sort(listAtual);
+        notifyDataSetChanged();
+    }
+
+    public void atualizarItens() {
+        listAtual = new ArrayList<>(listCompleta.values());
+        mudarOrder();
     }
 }

@@ -307,11 +307,11 @@ public class DetailsActivity extends AppCompatActivity {
                     anime.mudarTemp(-1);
                     switch (type) {
                         case 0:
-                            database.getReference(user).child("listaAtu").child(animeI).child("temp").setValue(anime.getEp());
+                            database.getReference(user).child("listaAtu").child(animeI).child("temp").setValue(anime.getTemp());
                             setResult(Codes.ANIME_MODIFY);
                             break;
                         case 1:
-                            database.getReference(user).child("listaConc").child(animeI).child("temp").setValue(anime.getEp());
+                            database.getReference(user).child("listaConc").child(animeI).child("temp").setValue(anime.getTemp());
                             setResult(Codes.ANIME_MODIFY_CONC);
                             break;
                     }

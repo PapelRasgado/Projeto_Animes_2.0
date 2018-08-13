@@ -1,4 +1,4 @@
-package com.jp.projetoanimes.types;
+package com.jp.projetoanimes.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.jp.projetoanimes.R;
+import com.jp.projetoanimes.types.FirebaseManager;
 
 @SuppressLint("InflateParams")
 public class RecoveryDialog extends AlertDialog.Builder implements
@@ -37,8 +38,6 @@ public class RecoveryDialog extends AlertDialog.Builder implements
         txt = view.findViewById(R.id.txt_input);
         btn = view.findViewById(R.id.btn_send);
         btn.setMode(ActionProcessButton.Mode.ENDLESS);
-
-        txt.setHint("Email...");
 
         setView(view);
 

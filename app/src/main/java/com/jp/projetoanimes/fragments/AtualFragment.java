@@ -79,12 +79,6 @@ public class AtualFragment extends Fragment {
     }
 
 
-    public void fazerPesquisa(boolean b, String nome){
-        if (adapter != null){
-            adapter.fazerPesquisa(b, nome);
-        }
-    }
-
     public void apagar(String identifier){
         adapter.apagar(identifier, recyclerView);
     }

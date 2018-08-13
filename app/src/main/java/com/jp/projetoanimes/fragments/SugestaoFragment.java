@@ -67,17 +67,7 @@ public class SugestaoFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-
-    public void fazerPesquisa(boolean b, String nome){
-        if (adapter != null){
-            adapter.fazerPesquisa(b, nome);
-        }
+    public static AdapterSu getAdapter() {
+        return adapter;
     }
-
-    public  void adiciona(String nome){
-        adapter.adicionar(nome);
-    }
-
-
-
 }

@@ -1,4 +1,4 @@
-package com.jp.projetoanimes.processes;
+package com.jp.projetoanimes.broadcast;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -62,11 +62,12 @@ public class CriarNotificacao extends BroadcastReceiver {
         notificacao.setLargeIcon(BitmapFactory.decodeResource(cont.getResources(),
                 R.drawable.icon_notify));
         notificacao.setAutoCancel(true);
+
         if (Patterns.WEB_URL.matcher(anime.getLink()).matches()){
             Intent notificationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(anime.getLink()));
 
-            PendingIntent contentIntent = PendingIntent.getActivity(cont, anime.getLink().hashCode(), notificationIntent, 0);
-            notificacao.addAction(R.drawable.ic_link, "Abrir no navegador", contentIntent);
+            PendingIntent contentIntent = PendingIntent.getActivity(cont, anime.getLink().hashCode(), notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            notificacao.addAction(R.drawable.ic_send, "Abrir no navegador", contentIntent);
         }
 
 

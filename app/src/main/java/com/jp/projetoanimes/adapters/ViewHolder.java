@@ -4,10 +4,8 @@ package com.jp.projetoanimes.adapters;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jp.projetoanimes.R;
 import com.sackcentury.shinebuttonlib.ShineButton;

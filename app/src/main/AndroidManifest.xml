@@ -3,6 +3,7 @@
     package="com.jp.projetoanimes">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:icon="@mipmap/icon"
@@ -37,10 +38,15 @@
             android:theme="@style/AppTheme" />
 
         <service android:name=".service.NotifyService"/>
-        <receiver android:name=".processes.CriarNotificacao"/>
+        <receiver android:name=".broadcast.CriarNotificacao"/>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="410900572bcd61ea6a6812ebbca840a8c8def3ec" />
+        <receiver android:name=".broadcast.StartUpBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

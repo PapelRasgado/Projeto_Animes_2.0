@@ -14,4 +14,6 @@ public class Codes {
     public static final int CONFIG_OPEN = 400;
     public static final int CONFIG_LOGOUT = 401;
 
+    public static String order = "ABC";
+
 }

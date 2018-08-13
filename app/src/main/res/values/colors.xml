@@ -6,4 +6,9 @@
     <color name="dayPressed">#303F9F</color>
     <color name="daySelected">#3F51B5</color>
     <color name="dayDeselected">@android:color/darker_gray</color>
+    <color name="green">#388e3c</color>
+    <color name="green_yellow">#d4e157</color>
+    <color name="yellow">#ffeb3b</color>
+    <color name="yellow_red">#ff7043</color>
+    <color name="red">#f44336</color>
 </resources>

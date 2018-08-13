@@ -77,12 +77,6 @@ public class ConcluidoFragment extends Fragment {
         mudarAdapter();
     }
 
-    public void fazerPesquisa(boolean b, String nome){
-        if (adapter != null){
-            adapter.fazerPesquisa(b, nome);
-        }
-    }
-
     public void apagar(String identifier){
         adapter.apagar(identifier, recyclerView);
     }

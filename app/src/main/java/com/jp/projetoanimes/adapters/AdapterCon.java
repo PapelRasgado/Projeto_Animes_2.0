@@ -236,6 +236,7 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon>{
 
     public void setListAtual(List<Anime> listAtual) {
         this.listAtual = listAtual;
+        mudarOrder();
         notifyDataSetChanged();
     }
 
@@ -289,7 +290,7 @@ public class AdapterCon extends RecyclerView.Adapter<ViewHolderCon>{
 
     private void mudarOrder(){
         Collections.sort(listAtual);
-        if (Anime.order.equals("CBA") || Anime.order.equals("321")){
+        if (Codes.order.equals("CBA") || Codes.order.equals("321")){
             Collections.reverse(listAtual);
         }
         notifyDataSetChanged();

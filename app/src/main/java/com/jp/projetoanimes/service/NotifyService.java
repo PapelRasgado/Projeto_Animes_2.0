@@ -15,7 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.jp.projetoanimes.processes.CriarNotificacao;
+import com.jp.projetoanimes.broadcast.CriarNotificacao;
 import com.jp.projetoanimes.types.Anime;
 import com.jp.projetoanimes.types.FirebaseManager;
 
@@ -136,6 +136,7 @@ public class NotifyService extends Service {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), anime.getIdentifier().hashCode(), it, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
         anime.setAgend(true);
+
         myRef.child(anime.getIdentifier()).child("agend").setValue(true);
     }
 
@@ -145,5 +146,15 @@ public class NotifyService extends Service {
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), identifier.hashCode(), it, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        for (Anime a: listCompleta.values()){
+            if (a.isAgend()){
+                cancelNotify(a.getIdentifier());
+            }
+        }
     }
 }

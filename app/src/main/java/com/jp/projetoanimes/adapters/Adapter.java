@@ -197,9 +197,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
                     .into(holder.img);
         }
 
-        if (anime.isStar()){
-            holder.star.setChecked(true);
-        }
+        holder.star.setChecked(anime.isStar());
         holder.star.setOnCheckStateChangeListener(new ShineButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(View view, boolean checked) {
@@ -218,8 +216,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         if (b) {
             new PesquisaTask(this).execute(nome);
         } else {
-            listAtual = new ArrayList<>(listCompleta.values());
-            mudarOrder();
+            atualizarItens();
         }
         notifyDataSetChanged();
     }
@@ -230,6 +227,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
     public void setListAtual(List<Anime> listAtual) {
         this.listAtual = listAtual;
+        mudarOrder();
         notifyDataSetChanged();
     }
 
@@ -280,9 +278,6 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
     private void mudarOrder(){
         Collections.sort(listAtual);
-        if (Anime.order.equals("CBA") || Anime.order.equals("321")){
-            Collections.reverse(listAtual);
-        }
         notifyDataSetChanged();
     }
 }

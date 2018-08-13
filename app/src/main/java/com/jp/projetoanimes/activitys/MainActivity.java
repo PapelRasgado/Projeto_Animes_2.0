@@ -26,7 +26,7 @@ import com.jp.projetoanimes.fragments.SugestaoFragment;
 import com.jp.projetoanimes.types.Anime;
 import com.jp.projetoanimes.types.Codes;
 import com.jp.projetoanimes.types.FirebaseManager;
-import com.jp.projetoanimes.types.InputDialog;
+import com.jp.projetoanimes.dialogs.InputDialog;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import io.fabric.sdk.android.Fabric;
@@ -94,10 +94,14 @@ public class MainActivity extends AppCompatActivity {
                 tabAtual = tab.getPosition();
                 switch (tabAtual) {
                     case 1:
-                        AtualFragment.getAdapter().atualizarItens();
+                        if (AtualFragment.getAdapter() != null){
+                            AtualFragment.getAdapter().atualizarItens();
+                        }
                         break;
                     case 2:
-                        ConcluidoFragment.getAdapter().atualizarItens();
+                        if (AtualFragment.getAdapter() != null){
+                            ConcluidoFragment.getAdapter().atualizarItens();
+                        }
                         break;
                 }
             }
@@ -139,20 +143,21 @@ public class MainActivity extends AppCompatActivity {
         mSearch.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                mSearch.clearFocus();
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 switch (tabAtual) {
                     case 0:
-                        suges.fazerPesquisa(true, newText);
+                        suges.getAdapter().fazerPesquisa(true, newText);
                         break;
                     case 1:
-                        atual.fazerPesquisa(true, newText);
+                        atual.getAdapter().fazerPesquisa(true, newText);
                         break;
                     case 2:
-                        conc.fazerPesquisa(true, newText);
+                        conc.getAdapter().fazerPesquisa(true, newText);
                         break;
                 }
                 return true;
@@ -170,13 +175,13 @@ public class MainActivity extends AppCompatActivity {
                 fab.setVisibility(View.VISIBLE);
                 switch (tabAtual) {
                     case 0:
-                        suges.fazerPesquisa(false, null);
+                        suges.getAdapter().fazerPesquisa(false, null);
                         break;
                     case 1:
-                        atual.fazerPesquisa(false, null);
+                        atual.getAdapter().fazerPesquisa(false, null);
                         break;
                     case 2:
-                        conc.fazerPesquisa(false, null);
+                        conc.getAdapter().fazerPesquisa(false, null);
                         break;
                 }
             }
@@ -197,13 +202,17 @@ public class MainActivity extends AppCompatActivity {
         database.getReference(FirebaseManager.getAuth().getUid()).child("order").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Anime.setOrder(dataSnapshot.getValue(String.class));
-                if (Anime.order.equals("ABC") || Anime.order.equals("CBA")) {
+                if (dataSnapshot.getValue(String.class) != null){
+                    Codes.order = dataSnapshot.getValue(String.class);
+                }
+                if (Codes.order.equals("ABC") || Codes.order.equals("CBA")) {
                     ordering.setIcon(R.drawable.ic_alphabetical);
                 } else {
                     ordering.setIcon(R.drawable.ic_timer);
                 }
-                atual.getAdapter().atualizarItens();
+                AtualFragment.getAdapter().atualizarItens();
+                ConcluidoFragment.getAdapter().atualizarItens();
+                SugestaoFragment.getAdapter().atualizarItens();
             }
 
             @Override
@@ -259,33 +268,34 @@ public class MainActivity extends AppCompatActivity {
             case R.id.about:
                 break;
             case R.id.order:
-                switch (Anime.order){
+                switch (Codes.order){
                     case "ABC":
-                        Anime.setOrder("CBA");
+                        Codes.order = "CBA";
                         Toast.makeText(this, "Ordenado por nome decrescente!", Toast.LENGTH_SHORT).show();
                         break;
                     case "CBA":
-                        Anime.setOrder("123");
+                        Codes.order = "123";
                         Toast.makeText(this, "Ordenado por data crescente!", Toast.LENGTH_SHORT).show();
                         break;
                     case "123":
-                        Anime.setOrder("321");
+                        Codes.order = "321";
                         Toast.makeText(this, "Ordenado por data decrescente!", Toast.LENGTH_SHORT).show();
                         break;
                     case "321":
-                        Anime.setOrder("ABC");
+                        Codes.order = "ABC";
                         Toast.makeText(this, "Ordenado por nome crescente!", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 AtualFragment.getAdapter().atualizarItens();
                 ConcluidoFragment.getAdapter().atualizarItens();
-                if (Anime.order.equals("ABC") || Anime.order.equals("CBA")) {
+                SugestaoFragment.getAdapter().atualizarItens();
+                if (Codes.order.equals("ABC") || Codes.order.equals("CBA")) {
                     item.setIcon(R.drawable.ic_alphabetical);
                 } else {
                     item.setIcon(R.drawable.ic_timer);
                 }
 
-                database.getReference(FirebaseManager.getAuth().getUid()).child("order").setValue(Anime.order);
+                database.getReference(FirebaseManager.getAuth().getUid()).child("order").setValue(Codes.order);
         }
         return true;
     }
